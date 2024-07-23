@@ -1,0 +1,598 @@
+<!--  -->
+<ngx-spinner>
+    <div class="spinner-border " role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </ngx-spinner>
+  <app-confirmation-modal #confirmationModal (confirm)="onConfirm()" (cancel)="onCancelDelete()" [showFooter]="true" [showIcon]="false">
+    <h5>Are you sure you want to Delete?</h5>
+  </app-confirmation-modal>
+  <app-confirmation-modal #successModal  [showFooter]="false" [showIcon]="true">
+    <h5>DQScorecard Deleted successfully!</h5>
+  </app-confirmation-modal>
+<div *ngIf="!showForm" class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+
+  <div class=" d-flex justify-content-between">
+
+    <div class="topic">
+      <h1 class="head">DQ Scorecards</h1>
+      <p class="para">Create and manage scorecards by grouping business rules to measure the data quality improvement against systems, departments etc.
+      </p>
+    </div>
+    <div class="justify-content-end">
+      <button class="btn btn-light AButt" [disabled]="!canEdit" (click)="toggleLinkedGridVisibility()">
+        Add New Card<i class="bi bi-plus-square-fill"></i>
+      </button>
+    </div>
+
+  </div>
+  <!-- table  -->
+  <div class="card">
+    <div class="card-body">
+      <div class="containers">
+        <!-- serch -->
+        <div class="row ">
+          <div class="col">
+          
+            <div class="searchbox">
+              <input type="text" class="form-control search" id="searchTerm" [(ngModel)]="filterData"  placeholder="Search" (ngModelChange)=" onInputChanges()"  />
+              <div class="icon">
+                <i class="bi bi-search"></i>
+    
+              </div>
+            </div>
+          </div>
+    
+          <div class="table-responsive">
+            <table class="table  table-hover">
+              <thead class="align-middle">
+                <tr>
+                  <th> No
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('code')"></i> 
+                  </th>
+                  <th>Scorecard Name
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('name')"></i> 
+    
+                  </th>
+                  <th>Current Score
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('cardscore')"></i> 
+    
+                  </th>
+                  <th>Target Score
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('cardthreshold')"></i> 
+    
+                  </th>
+    
+                  <th>Card Owner
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('cardowner')"></i> 
+                  </th>
+                  <th>Department
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('departmentcode')"></i> 
+    
+                  </th>
+                  <th>Rule Count
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('rulecount')"></i> 
+    
+                  </th>
+                  <th>Manage</th>
+                </tr>
+              </thead>
+              <tbody class="align-middle" *ngFor="let dqcard of dqcards | filter:editparam ; let i = index"
+              [class.odd]="i % 2 == 0" [class.even]="i % 2 != 0" >
+    
+              <tr    [ngClass]= "{'table-success': dqcard.code === editedCardId }" *ngIf="dqcard.code || dqcard.name || dqcard.cardscore || dqcard.cardthreshold || dqcard.cardowner ||dqcard.departmentcode.name">
+                  <td>{{dqcard.code}}</td>
+                  <td>{{dqcard.name}}</td>
+                  <td><div class="progress">
+                    <div 
+                      class="progress-bar" 
+                      role="progressbar" 
+                      [style.width.%]="dqcard.cardscore" 
+                      [attr.aria-valuenow]="dqcard.cardscore" 
+                      aria-valuemin="0" 
+                      aria-valuemax="100"
+                      [ngClass]="{
+                        'low': dqcard.cardscore <= 50,
+                        'medium': dqcard.cardscore > 50,
+                        'mediumplus': dqcard.cardscore >=75,
+                        'high': dqcard.cardscore == 100
+                      }">
+                      {{ dqcard.cardscore }}%
+                    </div> </div></td>
+                  <td>{{dqcard.cardthreshold}} </td>
+                  <td>{{dqcard.cardowner}}</td>
+                  <td>{{dqcard.departmentcode.name}} </td>
+                  <td>{{dqcard.rulecount}}</td>
+                  <td >
+                      <div class="tableButton">
+                          <i class="bi bi-pencil-square" ngbTooltip="Edit"
+                          [ngClass]="{'disabled':!canEdit}"  (click)="editDqCard(dqcard)"></i>
+                          <i class="bi bi-trash-fill" ngbTooltip="Delete"
+                          [ngClass]="{'disabled':!canDelete}"  (click)="deleteDqCard(dqcard)"></i>
+                      </div>
+                  </td>
+                  
+  
+              </tr>
+    
+               </tbody>
+            </table>
+          </div>
+          <!-- PAGINATION  
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a class="page-link" (click)="loadPage('previous')" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item"><a class="page-link" (click)="loadPage(1)">1</a></li>
+              <li class="page-item"><a class="page-link" (click)="loadPage(2)">2</a></li>
+              <li class="page-item"><a class="page-link" (click)="loadPage(3)">3</a></li>
+              <li class="page-item">
+                <a class="page-link" (click)="loadPage('next')" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>-->
+         <!-- <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a class="page-link" (click)="loadPage('previous')" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item" *ngFor="let pageNumber of getPageNumbers()" [ngClass]="{ 'active': pageNumber === currentpage }">
+                <a class="page-link" (click)="loadPage(pageNumber)">{{ pageNumber }}</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" (click)="loadPage('next')" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>-->
+          <app-pagination
+          [totalPages]="totalPages"
+          [currentPage]="currentpage"
+          (pageChange)="onPageChange($event)">
+     </app-pagination>
+     </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+<!-- second form -->
+
+<div *ngIf="showForm" class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+  <div class=" d-flex justify-content-between">
+
+    <div class="topic">
+      <h1 class="head">Data Quality card </h1>
+    <!--  <p class="para">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem consequuntur temporibus ipsam
+        ex! Neque rerum dolorem atque aperiam nobis quis.</p>-->
+    </div>
+
+  </div>
+   
+    <div class="card">
+      <div class="card-body">
+        <form  [formGroup]="form">
+        <div class="containers">
+          <div class="row ">
+            <!--  -->
+            <div class=" col">
+  
+              <div class="row ">
+                <div class="col-4">
+                    <input class="form-control " type="hidden" placeholder="" formControlName="code">
+                  <label for="input2" class="form-label">Scorecard Name </label>
+                  <input class="form-control " type="text" placeholder=""  formControlName="name" required [ngClass]="{
+                    'is-invalid': form.get('name')?.invalid && (form.get('name')?.touched),}">
+                    <div  *ngIf="form.get('name')?.invalid && (form.get('name')?.touched)" class="text-danger">
+                      Please Enter the Scorecard Name .
+                    </div>
+                </div>
+  
+                <div class="col-4">
+                  <label for="input2" class="form-label">Owner Name</label>
+                  <input class="form-control " type="text" placeholder="" formControlName="cardowner" required [ngClass]="{
+                    'is-invalid': form.get('cardowner')?.invalid && (form.get('cardowner')?.touched),}">
+                    <div  *ngIf="form.get('cardowner')?.invalid && (form.get('cardowner')?.touched)" class="text-danger">
+                      Please Enter the Owner Name .
+                    </div>
+                </div>
+  
+  
+                <div class="col-4">
+                  <label for="input2" class="form-label">Owner Email</label>
+                  <input class="form-control " type="email" placeholder=""formControlName="cardowneremail" [class.is-invalid]="form.get('cardowneremail')?.invalid && (form.get('cardowneremail')?.dirty || form.get('cardowneremail')?.touched)">
+                  <div *ngIf="form.get('cardowneremail')?.invalid && (form.get('cardowneremail')?.dirty || form.get('cardowneremail')?.touched)" class="invalid-feedback">
+                    <div *ngIf="form.get('cardowneremail')?.errors?.['required']">Email is required.</div>
+                    <div *ngIf="form.get('cardowneremail')?.errors?.['email']">Invalid email format.</div>
+                    
+  </div>
+                </div>
+  
+  
+                <div class="col-6">
+                  <label for="input2" class="form-label">Department Name</label>
+                  <select class="form-select"  formControlName="departmentcode"  [ngClass]="{
+                    'is-invalid': form.get('departmentcode')?.invalid && (form.get('departmentcode')?.touched),}">
+                    <option *ngFor="let dept of departments" [value]="dept.code">{{dept.name}}</option>
+                    <i class="bi bi-caret-down"></i>
+                </select>
+                <div  *ngIf="form.get('departmentcode')?.invalid && (form.get('departmentcode')?.touched)" class="text-danger">
+                  Please select the Department Name .
+                </div>
+                </div>
+  
+  
+                <div class="col-6">
+                  <label for="input2" class="form-label">Category Name</label>
+                  <select class="form-select"  formControlName="cardcategorycode" [ngClass]="{
+                    'is-invalid': form.get('cardcategorycode')?.invalid && (form.get('cardcategorycode')?.touched),}">
+                    <option *ngFor="let category of categories" [value]="category.code">{{category.name}}</option>
+                    <i class="bi bi-caret-down"></i>
+                  </select>
+                  <div  *ngIf="form.get('cardcategorycode')?.invalid && (form.get('cardcategorycode')?.touched)" class="text-danger">
+                    Please select the Category Name .
+                  </div>
+                </div>
+  
+              </div>
+  
+            </div>
+            <!-- status col-3 -->
+  
+            <div class="col-3 d-flex inputboxes align-items-center ">
+              <div class="row status ">
+                <div class="col">
+                  <label for="input2" class="form-label">Target Threshold</label>
+                  <input class="form-control" type="number" min="0" max="100" maxLength="2" formControlName="cardthreshold" [ngClass]="{
+                    'is-invalid': form.get('cardthreshold')?.invalid && (form.get('cardthreshold')?.touched),}" placeholder="%(Max 100)" appMax100>
+                 <div  *ngIf="form.get('cardcategorycode')?.invalid && (form.get('cardcategorycode')?.touched)" class="text-danger">
+                 Please Enter the Target Threshold .
+                  </div>
+                </div>
+                <!-- active and not active -->
+                <div class="col">
+                  <div class="row">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="isactive">
+                      <label class="form-check-label" for="flexCheckDefault">
+                        Is Active
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="isvisible">
+                      <label class="form-check-label" for="flexCheckDefault">
+                        Is visible in Dashboard
+                      </label>
+                    </div>
+                  </div>
+  
+                </div>
+              </div>
+  
+            </div>
+  
+          </div>
+        </div>
+        <ng-toast [style]="{width:'300px'}"></ng-toast>
+        </form>
+        <div class="d-flex justify-content-center ">
+          <div class="lbut">
+            <div>
+              <button type="button" class="btn btn-light b1" [disabled]="!canEdit" (click)="saveDqcard()">Save</button>
+            </div>
+      
+            <div>
+              <button type="button" class="btn btn-light b2"(click)="Clear()">Clear</button>
+            </div>
+      
+            <div>
+              <button type="button" class="btn btn-light b3"(click)="Back()">Close</button>
+            </div>
+      
+          </div>
+        </div>
+  <!--table-->
+  <div class="gridBody" *ngIf="showGridBody">
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true" *ngIf="showAddNewButton" (click)="onAddLinkClick(true)">Linked Rules</button>
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true" *ngIf="showEditNewButton" (click)="onLinkClick(true)">Linked Rules</button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" (click)="onLinkClick(false)">Unlinked Rules </button>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+        <!-- table linked -->
+        <div class="body">
+          <!-- serch -->
+  <h5 class="head">Linked Rules[{{this.links.length}}]</h5>
+          <div class="row ">
+            <div class="col">
+              <label class="searchlabel" for="searchTerm">Search:</label>
+              <div class="searchbox">
+                <input type="text" class="form-control search" id="searchTerm" [formControl]="linkedSearchTerm" placeholder="Enter search term" />
+                <div class="icon">
+                  <i class="bi bi-search"></i>
+  
+                </div>
+              </div>
+            </div>
+  
+            <div class="table-responsive">
+              <table class="table  table-hover">
+                <thead class="align-middle">
+                  <tr>
+                    <th>Rule No 
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'Ruleno' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'Ruleno' &&sort_order === 'desc'" (click)="sortTable1('Ruleno')"></i>
+                    </th>
+                    <th>Data Element
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'DataElement' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'DataElement' &&sort_order === 'desc'" (click)="sortTable1('DataElement')"></i>
+                    </th>
+                    <th>DQ category
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'CategoryName' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'CategoryName' &&sort_order === 'desc'" (click)="sortTable1('CategoryName')"></i>
+                    </th>
+                    <th>Priority
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'PriorityName' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'PriorityName' &&sort_order === 'desc'" (click)="sortTable1('PriorityName')"></i>
+                    </th>
+                    <th>DQ Domain
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'DQDomainName' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'DQDomainName' &&sort_order === 'desc'" (click)="sortTable1('DQDomainName')"></i>
+                    </th>
+                    <th>Target Threshold
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'DQThresholdPercentage' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'DQThresholdPercentage' &&sort_order === 'desc'" (click)="sortTable1('DQThresholdPercentage')"></i>
+                    </th>
+                    <th>Status
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'StatusName' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'StatusName' &&sort_order === 'desc'" (click)="sortTable1('StatusName')"></i>
+                    </th>
+                    <th>Scoring
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'Scoring' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'Scoring' &&sort_order === 'desc'" (click)="sortTable1('Scoring')"></i>
+                    </th>
+                    <th>Profiling
+                      <i class="bi"></i>
+                    </th>
+                    <th>Select</th>
+                  </tr>
+                </thead>
+                <tbody class="align-middle" *ngFor= "let link of links | filter:editparam ;let i=index " 
+                 [class.odd]="i % 2 == 0" [class.even]="i % 2 != 0">
+                  <tr >
+                    <td>{{link.Ruleno}}</td>
+                    <td>{{link.DataElement}}</td>
+                    <td>{{link.CategoryName}}</td>
+                    <td>{{link.PriorityName}}</td>
+                    <td>{{link.DQDomainName}}</td>
+                    <td><span *ngIf="link. DQThresholdPercentage != null">{{ link. DQThresholdPercentage }}</span>
+                      <span *ngIf="link. DQThresholdPercentage == null && link.targetresolutiondate != null">{{ link.targetresolutiondate | date:'MM/dd/yyyy' }}</span></td>
+                    <td>{{link.StatusName}}</td>
+                    <td><div class="progress">
+                      <div 
+                        class="progress-bar" 
+                        role="progressbar" 
+                        [style.width.%]="link.Scoring" 
+                        [attr.aria-valuenow]="link.Scoring" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100"
+                        [ngClass]="{
+                          'low': link.Scoring <= 50,
+                          'medium': link.Scoring > 50,
+                          'mediumplus': link.Scoring >=75,
+                          'high': link.Scoring == 100
+                        }">{{link.Scoring}}%</div></div></td>
+                    <td>
+                      {{link.OverallValidationFlag ? 'Yes' : 'No'}}</td>
+                    <td>
+  
+                      <div class="form-check d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" [checked]="selectedRows[i]" (change)="onCheckboxChange(i)">
+                        <label class="form-check-label" for="flexCheckDefault" ></label>
+                      </div>
+  
+                    </td>
+  
+                  </tr>
+  
+  
+  
+                </tbody>
+              </table>
+            </div>
+            <!-- PAGINATION  -->
+           <!-- <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center ">
+                <li class="page-item">
+                  <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+             
+            </nav>-->
+            <app-pagination
+            [totalPages]="totalPages"
+            [currentPage]="currentpage"
+            (pageChange)="onPagelink($event)">
+       </app-pagination>
+            <!-- button -->
+            <div class="d-flex justify-content-center ">
+              <div class="lbut">
+                <!-- link rules button -->
+  
+                <div class="FisrtFormBut">
+                  <button type="button" class="btn btn-light" [disabled]="!canEdit" (click)="unlinkRule()">Unlink Rules</button>
+                </div>
+  
+  
+              </div>
+  
+  
+            </div>
+          </div>
+  
+  
+  
+        </div>
+      </div>
+      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+        <!-- table unlinked -->
+        <div class="body">
+          <!-- serch -->
+          <div class="row ">
+            <div class="col">
+              <label class="searchlabel" for="searchTerm">Search:</label>
+              <div class="searchbox">
+                <input type="text" class="form-control search" id="searchTerm" [formControl]="unlinkedSearchTerm" placeholder="Enter search term" />
+                <div class="icon">
+                  <i class="bi bi-search"></i>
+  
+                </div>
+              </div>
+            </div>
+  
+            <div class="table-responsive">
+              <table class="table  table-hover">
+                <thead class="align-middle">
+                  <tr>
+                    <th>Rule No 
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'Ruleno' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'Ruleno' &&sort_order === 'desc'" (click)="sortTable1('Ruleno')"></i>
+                    </th>
+                    <th>Data Element
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'DataElement' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'DataElement' &&sort_order === 'desc'" (click)="sortTable1('DataElement')"></i>
+                    </th>
+                    <th>DQ category
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'CategoryName' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'CategoryName' &&sort_order === 'desc'" (click)="sortTable1('CategoryName')"></i>
+                    </th>
+                    <th>Priority
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'PriorityName' || sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'PriorityName' &&sort_order === 'desc'" (click)="sortTable1('PriorityName')"></i>
+                    </th>
+                    <th>DQ Domain
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'DQDomainName' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'DQDomainName' &&sort_order === 'desc'" (click)="sortTable1('DQDomainName')"></i>
+                    </th>
+                    <th>Target Threshold
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'DQThresholdPercentage' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'DQThresholdPercentage' &&sort_order === 'desc'" (click)="sortTable1('DQThresholdPercentage')"></i>
+                    </th>
+                    <th>Status
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'StatusName' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'StatusName' &&sort_order === 'desc'" (click)="sortTable1('StatusName')"></i>
+                    </th>
+                    <th>Scoring
+                      <i class="bi" [class.bi-sort-alpha-up]="sort_by !== 'Scoring' ||sort_order === 'asc'" [class.bi-sort-alpha-up-alt]="sort_by === 'Scoring' &&sort_order === 'desc'" (click)="sortTable1('Scoring')"></i>
+                    </th>
+                    <th>Profiling
+                      <i class="bi"></i>
+                    </th>
+                    <th>Select</th>
+                  </tr>
+                </thead>
+                <tbody class="align-middle" *ngFor="let link of links | filter:editparam; let i=index"
+                >
+                <tr>
+                  <td>{{link.Ruleno}}</td>
+                  <td>{{link.DataElement}}</td>
+                  <td>{{link.CategoryName}}</td>
+                  <td>{{link.PriorityName}}</td>
+                  <td>{{link.DQDomainName}}</td>
+                  <td><span *ngIf="link. DQThresholdPercentage != null">{{ link. DQThresholdPercentage }}</span>
+                    <span *ngIf="link. DQThresholdPercentage == null && link.targetresolutiondate != null">{{ link.targetresolutiondate | date:'MM/dd/yyyy' }}</span></td>
+                  <td>{{link.StatusName}}</td>
+                  <td><div class="progress">
+                    <div 
+                      class="progress-bar" 
+                      role="progressbar" 
+                      [style.width.%]="link.Scoring" 
+                      [attr.aria-valuenow]="link.Scoring" 
+                      aria-valuemin="0" 
+                      aria-valuemax="100"
+                      [ngClass]="{
+                        'low': link.Scoring <= 50,
+                        'medium': link.Scoring > 50,
+                        'mediumplus': link.Scoring >=75,
+                        'high': link.Scoring == 100
+                      }">{{link.Scoring}}%</div></div></td>
+                  <td>
+                    {{link.OverallValidationFlag ? 'Yes' : 'No'}}</td>
+                  <td>
+
+                    <div class="form-check d-flex justify-content-center">
+                      <input class="form-check-input" type="checkbox" id="flexCheckDefault_{{i}}"
+                      [checked]="checkboxes[i]" (change)="onCheckboxChange(i)">
+                      <label class="form-check-label" for="flexCheckDefault">
+
+                      </label>
+                    </div>
+
+                  </td>
+
+
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- PAGINATION  -->
+           <!-- <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center ">
+                <li class="page-item">
+                  <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>-->
+            <app-pagination
+            [totalPages]="totalPages"
+            [currentPage]="currentpage"
+            (pageChange)="onPageunlink($event)">
+       </app-pagination>
+            <!-- button -->
+            <div class="d-flex justify-content-center ">
+              <div class="lbut">
+                <div class="FisrtFormBut">
+                  <button type="button" class="btn btn-light" [disabled]="!canSave" (click)="linkRule()">Link Rules</button>
+                </div>
+  
+  
+              </div>
+  
+  
+            </div>
+  
+          </div>
+  
+        </div>
+      </div>
+      
+    </div>
+
+    
+  </div>
+  <!--table-->
+ 
+ 
+
+
+
+

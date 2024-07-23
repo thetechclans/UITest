@@ -1,0 +1,33 @@
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+@import 'ngx-toastr/toastr';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.active{
+    background-color:  rgb(120, 140, 148);
+    
+  }
+  .disabled {
+    opacity: 0.5; 
+    pointer-events: none; 
+    background-color: #E9ECEF;
+    border-radius: 12px;
+  }
+  .page-link:hover,
+.page-item.active .page-link {
+  background-color: cadetblue !important; /* Change to cadet blue or any other desired color */
+  color: white !important; /* Change text color to ensure visibility */
+  border: none;
+   
+}
+
+.pagination .page-item .page-link {
+  color:  cadetblue;
+}
+.page-link{
+  cursor:pointer;
+}
+.spinner-border{
+  color:  cadetblue;
+}

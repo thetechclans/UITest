@@ -1,0 +1,441 @@
+<main class="row-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+    <div class=" d-flex justify-content-between">
+
+        <div class="topic">
+            <h1 class="head">Settings and Options </h1>
+            <!--  <p class="para">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem consequuntur temporibus ipsam
+            ex! Neque rerum dolorem atque aperiam nobis quis.</p>-->
+        </div>
+
+    </div>
+
+    <!--<div class="row ">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12 mainCard">
+
+                    <div class="col-md-12">
+                        <div class="card m1">
+                            <div class="card-body txtbody">
+                                <div class="txt">
+                                    <label class=""> Master Details </label>
+                                </div>
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-5">
+                                        <label for="">Organisation Name</label>
+                                        <input type="text" class="form-control" id="organisationname" formControlName="organisationname" required>
+
+
+                                    </div>
+                                    <div class="col-5">
+                                        <label for="">Contact Name</label>
+                                        <input type="text" class="form-control" id="contactname" formControlName="contactname" required>
+
+
+                                    </div>
+
+                                </div>
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-5">
+                                        <label for="">Contact Email</label>
+                                        <input type="email" class="form-control" id="contactemail" formControlName="contactemail" required>
+
+
+                                    </div>
+                                    <div class="col-5">
+                                        <label for="">Contact Mobile</label>
+                                        <input type="tel" class="form-control" id="contactmobile" formControlName="contactmobile" required>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card m2">
+                            <div class="card-body txtbody">
+                                <div class="txt">
+                                    <label class=""> Program Details </label>
+                                </div>
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-5 check d-flex justify-content-start">
+                                        <label for="">Full Auto-Increment :</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" formControlName="fullincrement" name="fullincrement">
+                                            <label class="form-check-label">
+                                                Yes
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" formControlName="fullincrement" name="fullincrement">
+                                            <label class="form-check-label">
+                                                No
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-5 check d-flex justify-content-start">
+                                        <label for="">Prefix Auto-Increment :</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio"formControlName="prefixincrement" name="prefixincrement">
+
+                                            <label class="form-check-label">
+                                                Yes
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" formControlName="prefixincrement" name="prefixincrement">
+                                            <label class="form-check-label">
+                                                No
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row inputContent d-flex justify-content-center ">
+                                        <div class="col-5  ">
+                                            <label>Prefix Text </label>
+                                            <input type="email" class="form-control" id=" prefixtext" formControlName=" prefixtext"
+                                                required>
+
+
+                                        </div>
+                                        <div class="col-5  ">
+                                            <label>Default email To Send Profiling Results </label>
+                                            <input type="email" class="form-control" id="sendprofilingresults" formControlName="sendprofilingresults"
+                                                required>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="btt d-flex justify-content-center">
+                <button type="button" class="btn btn-light" (click)="saveOrganisation()">save</button>
+               </div>
+
+
+            </div>
+
+        </form>
+    </div>-->
+    <div class="row">
+        <div class="cadrd col">
+            <div class="card-boddy  ">
+                <form [formGroup]="form">
+                    <div class="col-6 form1">
+
+                        <div class="row  form-group  ">
+
+
+                            <label class="text-centers"> Master Details </label>
+                            <input type="hidden" class="form-control" formControlName="code">
+                            <label for="">Organisation Name</label>
+                            <input type="text" class="form-control" id="organisationname"
+                                formControlName="organisationname" [ngClass]="{
+                            'is-invalid': form.get('organisationname')?.invalid && (form.get('organisationname')?.touched),
+                          }" required>
+                            <div *ngIf="form.get('organisationname')?.invalid && (form.get('organisationname')?.touched)"
+                                class="text-danger">
+                                Please Enter the Organisation name.
+                            </div>
+                            <label for="">Contact Name</label>
+                            <input type="text" class="form-control" id=" contactname" formControlName="contactname"
+                                [ngClass]="{
+                            'is-invalid': form.get('contactname')?.invalid && (form.get('contactname')?.touched),
+                          }" required>
+                            <div *ngIf="form.get('contactname')?.invalid && (form.get('contactname')?.touched)"
+                                class="text-danger">
+                                Please Enter the Contact name.
+                            </div>
+                            <label for="">Contact Email</label>
+                            <input type="email" class="form-control" id=" contactemail" formControlName="contactemail"
+                                [ngClass]="{
+                            'is-invalid': form.get('contactemail')?.invalid && (form.get('contactemail')?.touched),
+                          }" required>
+                            <div *ngIf="form.get('contactemail')?.invalid && (form.get('contactemail')?.touched)"
+                                class="text-danger">
+                                Please Enter the Contact email.
+                            </div>
+                            <label for="">Contact Mobile</label>
+                            <input type="tel" class="form-control" id="contactmobile" formControlName="contactmobile"
+                                [ngClass]="{
+                            'is-invalid': form.get('contactmobile')?.invalid && (form.get('contactmobile')?.touched),
+                          }" required>
+                            <div *ngIf="form.get('contactmobile')?.invalid && (form.get('contactmobile')?.touched)"
+                                class="text-danger">
+                                Please Enter the contact mobile.
+                            </div>
+                            <label>Default email To Send Profiling Results </label>
+                            <input type="email" class="form-control" id="sendprofilingresults"
+                                formControlName="sendprofilingresults" [ngClass]="{
+                            'is-invalid': form.get('sendprofilingresults')?.invalid && (form.get('sendprofilingresults')?.touched),
+                          }" required>
+                            <div *ngIf="form.get('sendprofilingresults')?.invalid && (form.get('sendprofilingresults')?.touched)"
+                                class="text-danger">
+                                Please Enter the Email.
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="col-10 form2 input-container ">
+                        <label for="" class="txt"> Business Rule No Auto Generation </label>
+                        <div class="row row1">
+                            <div class="col-6">
+                                <label for="">Full Auto-Increment :</label>
+
+                            </div>
+                            <div class="col-3 d-flex">
+                                <div class="form-check ">
+                                    <input class="form-check-input" type="radio" name="fullincrement"
+                                        formControlName="fullincrement" value="true"
+                                        [checked]="form.get('fullincrement')?.value === true" [ngClass]="{
+                                    'is-invalid': form.get('fullincrement')?.invalid && (form.get('fullincrement')?.touched),
+                                  }">
+                                    <label class="form-check-label">
+                                        Yes
+                                    </label>
+                                </div>
+
+                                <div class="form-check ">
+                                    <input class="form-check-input" type="radio" name="fullincrement"
+                                        formControlName="fullincrement" value="false"
+                                        [checked]="form.get('fullincrement')?.value === false" [ngClass]="{
+                                    'is-invalid': form.get('fullincrement')?.invalid && (form.get('fullincrement')?.touched),
+                                  }">
+                                    <label class="form-check-label">
+                                        No
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div *ngIf="form.get('fullincrement')?.invalid && (form.get('fullincrement')?.touched)"
+                                class="text-danger">
+                                Please Choose the Full Auto-Increment
+                            </div>
+
+                        </div>
+                        <div class="row row2">
+                            <div class="col-6">
+                                <label for="">Prefix Auto-Increment :</label>
+                            </div>
+                            <div class=" d-flex col-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="prefixincrement"
+                                        formControlName="prefixincrement" value="true"
+                                        [checked]="form.get('prefixincrement')?.value === true" [ngClass]="{
+                                    'is-invalid': form.get('prefixincrement')?.invalid && (form.get('prefixincrement')?.touched),
+                                  }" checked>
+                                    <label class="form-check-label">
+                                        Yes
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="prefixincrement"
+                                        formControlName="prefixincrement" value="false"
+                                        [checked]="form.get('prefixincrement')?.value === false" [ngClass]="{
+                                    'is-invalid': form.get('prefixincrement')?.invalid && (form.get('prefixincrement')?.touched),
+                                  }">
+                                    <label class="form-check-label">
+                                        No
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div *ngIf="form.get('prefixincrement')?.invalid && (form.get('prefixincrement')?.touched)"
+                                class="text-danger">
+                                Please Choose the Prefix Auto-Increment
+                            </div>
+                            <div class="row row2">
+                                <div class="col-6 d-flex align-items-start ">
+                                    <label>Prefix Text </label>
+                                </div>
+                                <div class="col-6 d-flex row1 justify-content-between ">
+                                    <input type="text" class="form-control" id="prefixtext" formControlName="prefixtext"
+                                        [disabled]="!form.get('prefixincrement')?.value" [ngClass]="{
+                                    'is-invalid': form.get('prefixtext')?.invalid && (form.get('prefixtext')?.touched),
+                                  }" required>
+
+                                </div>
+                                <div *ngIf="form.get('prefixtext')?.invalid && (form.get('prefixtext')?.touched)"
+                                    class="text-danger">
+                                    Please Enter the Prefix Text
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="btt d-flex justify-content-center">
+                        <button type="button" class="btn btn-light" [disabled]="!canEdit"
+                            (click)="saveOrganisation()">save</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <div class="col cc">
+            <div class="container">
+                <!--<div class="row">
+                    <div class="img">
+                        <img src="../../../dqms/assets/imgs/settings.jpeg" alt="">
+
+                    </div>
+
+                </div>-->
+                <!-- <div class="row">
+
+                <div class="col">
+                    <div class="image-container">
+                        <img src="/assets/imgs/DQMs.jpg" alt="Image">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="content ">
+                        
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                Welcome to the future of data quality management with Techclans Data Quality Management System (DQMS)!
+                In today's rapidly evolving digital landscape, the importance of high-quality data cannot be overstated
+                . Whether you're a small business or a multinational corporation, ensuring that your data is accurate, c
+                omplete, consistent, and timely is paramount for making informed decisions and gaining a competitive
+                edge. That's where Techclans DQMS comes in.
+            </div> -->
+
+                <!-- <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="image-container">
+                            <img src="/assets/imgs/WhatsApp Image 2024-05-09 at 1.06.25 PM.jpeg" alt="Image" class="img-fluid">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="content">
+                            <h4>REVOLUTIONIZING DATA QUALITY MANAGEMENT</h4>
+                            <p>Welcome to the future of data quality management with Techclans Data Quality Management System (DQMS)!</p>
+                        </div>
+                    </div>
+                    <div class="cont">
+                        <p>In today's rapidly evolving digital landscape, the importance of high-quality data cannot be overstated. Whether you're a small business or a multinational corporation, ensuring that your data is accurate, complete, consistent, and timely is paramount for making informed decisions and gaining a competitive edge. That's where Techclans DQMS comes in.</p>
+
+                    </div>
+
+                    <div class="cont">
+<p>INSIGHTFUL DASHBOARDS FOR REAL-TIME MONITORING<br>
+    Keep track of your data quality initiatives with our user-friendly dashboards, providing real-time insights into progress, trends, and areas for improvement. With customizable views and interactive visualizations, you'll have everything you need to stay ahead of the curve.</p>
+                        
+                    </div>
+                </div>
+            </div>-->
+
+                <div class="containers">
+                    <div class="header">Data Quality Management System Settings</div>
+
+                    <div class="section timeliness">
+                        <h3>Timeliness</h3>
+                        <p>Degree to which the data is available at the time it is needed.</p>
+                    </div>
+                    <div class="section accuracy">
+                        <h3>Accuracy</h3>
+                        <p>Degree to which the data represents the reality.</p>
+                    </div>
+                    <div class="section validity">
+                        <h3>Validity</h3>
+                        <p>Degree to which the data is within defined requirements like format, type, and range.</p>
+                    </div>
+                    <div class="section completeness">
+                        <h3>Completeness</h3>
+                        <p>Degree to which necessary data is available for use.</p>
+                    </div>
+                    <div class="section uniqueness">
+                        <h3>Uniqueness</h3>
+                        <p>Degree to which data is unique and cannot be mistaken for other entries.</p>
+                    </div>
+                    <div class="section consistency">
+                        <h3>Consistency</h3>
+                        <p>Degree to which the data is equal within and between datasets.</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="modal fade" id="NewConnectionModal1" #newConnectionModal tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog  modal-sm  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="text-sucess" style="color: green;" >
+
+                    Data Updated Sucessfully !!!
+                </div>
+
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <h6>The Changes will be Reflected in next Login</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="liveToastBtn" (click)="logout()"
+                    data-bs-dismiss="modal">Logout
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue</button>
+                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1"  (click)="back()"
+          >Back
+        </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="NewConnectionModal" #newConnectionModal tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog  modal-sm  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="text-sucess" style="color: green;" >
+                    Data Saved Sucessfully !!
+                </div>
+
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <h6>The Changes will be Reflected in next Login</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="liveToastBtn" (click)="logout()"
+                    data-bs-dismiss="modal">Logout
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue</button>
+                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1"  (click)="back()"
+          >Back
+        </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+<ng-toast [style]="{width:'300px'}"></ng-toast>

@@ -1,0 +1,168 @@
+component.ts
+
+// initialize this variable above class
+currentSortField: string = ''; 
+currentSortOrder: string = '';
+
+// pass the ordering as arguement 
+
+getDqruleDetail(page: number ){
+  let ordering = this.currentSortField ? `${this.currentSortOrder}${this.currentSortField}` : null; ==> ordering
+  this.spinner.show();
+  this.srvdqrule. getDQRuleDetailCurrent(page,ordering,this.filterData).subscribe(data=>{  ==> pass as arguement 
+   this.spinner.hide();
+   console.log('i want',data)
+      if (data && data.length > 0) {
+        this.dqrulesdetail = data;
+        } else {
+        this.dqrulesdetail = Array(10).fill({
+          code: '',
+          ruleno: '',
+          dataelement: '',
+          categorycode: '',
+          prioritycode: '',
+          dqdomaincode: '',
+          dqthresholdpercentage: null,
+          statuscode: '',
+          overallvalidationflag: ''
+        });
+      }
+      },error => {
+        this.spinner.hide();
+    }); 
+ }
+
+// add this variable for icon
+
+visible:boolean=false; 
+
+//add this function inside class
+
+sortTable(field: string): void {  
+  console.log('inside sort')
+  if (this.currentSortField === field) {
+    this.currentSortOrder = this.currentSortOrder === '' ? '-' : '';
+    this.visible = !this.visible;
+    console.log(this.visible ? 'asc' : 'desc');
+  } else {
+    this.currentSortOrder = '';
+    this.visible = false;
+    console.log('desc')
+  }
+  this.currentSortField = field;
+  this.getDqruleDetail(this.currentpage);
+}
+
+
+Html
+
+// add the two icon in <i> set boolean for visibility
+
+  <table class="table table-hover">
+            <thead class="align-middle">
+              <tr>
+                <th>Rule No
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('ruleno')"></i></th>  // two icon used here using boolean variable it can be change
+                <th>Data Element
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dataelement')"></i></th>
+                <th>DQ Category 
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('categorycode__name')"></i></th>
+                <th>Priority
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('prioritycode__name')"></i></th>
+                <th>DQ Domain
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dqdomaincode__name')"></i></th>
+                <th>Threshold/Resolution
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dqthresholdpercentage')"></i>
+                </th>
+                <th>Status
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('statuscode__name')"></i></th>
+                <!-- <th> Profiling<i class="bi bi-sort-alpha-up"  (click)="sortTable('')"></i></th> -->
+                <th> Profiling
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('overallvalidationflag')"></i></th>
+                <th>Manage</th>
+              </tr>
+            </thead>
+            <tbody class="align-middle" >
+              <tr *ngFor="let dqruledetail of dqrulesdetail | filter:filterData; let i = index"
+              [class.odd]="i % 2 == 0" [class.even]="i % 2 != 0" [ngClass]= "{'table-success': dqruledetail.code === editedBusinessId }">
+                <td>{{dqruledetail.ruleno}}</td>
+                <td>{{dqruledetail.dataelement}} </td>
+                <td>{{dqruledetail.categorycode.name}}</td>
+                <td>{{dqruledetail.prioritycode.name}}</td>
+                <td>{{dqruledetail.dqdomaincode.name}}</td>
+                <td style="text-align: center;" >
+                  <span *ngIf="dqruledetail.dqthresholdpercentage != null">{{ dqruledetail.dqthresholdpercentage }}</span>
+                  <span *ngIf="dqruledetail.dqthresholdpercentage == null && dqruledetail.targetresolutiondate != null">{{ dqruledetail.targetresolutiondate | date:'MM/dd/yyyy' }}</span>
+                
+                <td>{{dqruledetail.statuscode.name}}</td>
+                <!-- <td>{{dqruledetail.overallvalidationflag? 'Yes' : 'No'}}</td> -->
+                <td style="text-align: center;"
+                  *ngIf="dqruledetail.ruleno || dqruledetail.dataelement || dqruledetail.categorycode.name || dqruledetail.prioritycode.name || dqruledetail.dqdomaincode.name || dqruledetail.dqthresholdpercentage || dqruledetail.statuscode.name">
+                  {{dqruledetail.overallvalidationflag ? 'Yes' : 'No'}}
+                </td>
+                <td
+                  *ngIf="dqruledetail.ruleno || dqruledetail.dataelement || dqruledetail.categorycode.name || dqruledetail.prioritycode.name || dqruledetail.dqdomaincode.name || dqruledetail.dqthresholdpercentage || dqruledetail.statuscode.name ||
+                  dqruledetail.overallvalidationflag ">
+                  <div class="d-flex tableButton">
+                    <i class="bi bi-pencil-square" ngbTooltip="Edit"  (click)="editBusinessRule(dqruledetail)"></i>
+                    <i class="bi bi-trash-fill" ngbTooltip="Delete" [ngClass]="{'disabled':!canDelete}" (click)="deleteBusinessRule(dqruledetail)"></i>
+                  </div>
+
+                </td>
+
+
+              </tr>
+
+            </tbody>
+          </table>
+
+
+scss:
+ 
+ i{
+        color: #ffffff; 
+        font-size: 22px;
+      }
+      
+.bi-sort-alpha-up {
+
+  font-size: 10px;
+}
+.bi-sort-alpha-down{
+  font-size: 10px;
+
+}
+.bi-sort-numeric-up {
+  font-size: 20px;
+}
+.bi-sort-numeric-down {
+  font-size: 20px;
+}
+
+
+services:
+
+//here pagination,sorting,search can be passed as a arguement
+
+ getSchedule(page: number | null = null,ordering: string | null = null,searchTerm: string = ''): Observable<scheduleFrequencyInf[]> {   //services
+    let url = `${this.apiService}${this.endpointschedulefrequencyPG}`;
+    
+    const params = new URLSearchParams();
+
+    if (searchTerm) {
+        params.append('search', searchTerm);
+    }else if (page !== null ) {
+        params.append('page', page.toString());
+    }
+
+    if (ordering !== null) {
+        params.append('ordering', ordering);
+    }
+
+    if (params.toString()) {
+        url += `?${params.toString()}`;
+    }
+    return this.http
+      .get(url)
+      .pipe<scheduleFrequencyInf[]>(map((data: any) => data.results));
+  }

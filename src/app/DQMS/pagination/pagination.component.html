@@ -1,0 +1,20 @@
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="loadPage('previous')" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item" *ngFor="let pageNumber of pageNumbers" 
+          [ngClass]="{ 'active': pageNumber === currentPage, 'disabled': pageNumber === '...' }">
+        <a class="page-link" (click)="loadPage(pageNumber)" *ngIf="pageNumber !== '...'">{{ pageNumber }}</a>
+        <span class="page-link" *ngIf="pageNumber === '...'">{{ pageNumber }}</span>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="loadPage('next')" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  

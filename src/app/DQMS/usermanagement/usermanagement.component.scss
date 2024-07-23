@@ -1,0 +1,323 @@
+.GridForm{
+  //margin: 0;
+  padding: 5px;
+}
+// font
+// .table-responsive{
+//      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+//    //font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+// }
+
+/* Custom styles for the table */
+.table {
+    margin-bottom: 0; /* Remove default table margin */
+
+  }
+  .head{
+    font-style: bold ;
+    font-size: 30px;
+    color: rgb(56, 78, 83);
+  }
+  
+  .table thead th {
+    // background-color: #1f7d8a; /* Header background color */
+   // background-color: rgb(49 57 67 / 38%);
+    background-color: cadetblue;
+    color: #ffffff; /* Header text color */
+    text-align: center;
+  }
+
+  //pagination
+.pagination{
+  margin-top: 10px;
+}
+.pagination .page-item .page-link {
+color: cadetblue;
+}
+.page-link{
+  cursor:pointer;
+}
+  
+  .containers{
+    //font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    padding: 12px;
+  }
+
+  .table-bordered th,
+  .table-bordered td {
+    border: 1px solid #dee2e6; /* Table cell border */
+  }
+
+    ///buttun in table
+
+    .form-check-input {
+      border: 2px solid cadetblue;
+    }
+
+
+.table-responsive .btn {
+  /* Set your desired background color */
+  
+   /* Add rounded corners */
+  color:black;
+  border-radius: 14px;
+  background-color:white;
+  font-size: 20px;
+  //padding: 10px;
+  border: none; /* Remove button border if needed */
+  cursor: pointer; /* Add a pointer cursor for better interaction */
+
+  &:hover {
+      background-color:rgb(43, 159, 172); /* Set your desired hover color */
+  }
+
+}
+  
+  /* Custom styles for the "Add New Data Source" button */
+ .text-right{
+  margin-right: 25px;
+ }
+  .AButt i {
+    /* Add styles for the icon here */
+    margin-left: 5px; /* Adjust the spacing between the icon and text */
+  }
+//secForm edit validate button
+.secFormButton{
+display: flex;
+justify-content: space-between;
+
+}
+
+ 
+ // Add this to your component's SCSS file
+
+.table-responsive {
+
+ 
+    transition : 1s;
+    overflow-y: auto ;
+    max-height: 540px;
+
+       table  {
+        tbody{
+          tr{
+            height: 50px;
+            td{
+              text-align: center;
+
+            }
+          }
+        
+        }
+      thead {
+        tr{
+          z-index: 1;
+          top: 0;
+          position: sticky;
+        
+          th{
+            text-align: center;
+            width: calc(100% / 6);
+            i{
+              color: #ffffff;   // scss
+              font-size: 22px;
+            }
+          }
+          
+      }
+      }
+      tr {
+        height: 40px;
+        
+      }
+
+    }
+  }
+
+  .card{
+   // margin-top: 10px;
+    background-color: #ffff;border-radius: 14px;
+    //height: 800px; 
+    padding: 0;   
+   
+  
+    
+  
+  }
+ //grid button edit delete
+.tableButton{
+ 
+  i{
+    color:cadetblue;
+    padding: 10px;
+    font-size: large;
+    //transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    cursor: pointer;
+ 
+    }
+    i:hover {
+      background-color: #bfcfdf;
+      border-radius: 12px; /* Change to your desired hover color */
+      //transform: scale(1.1); /* Example: Increase size on hover */
+    }
+}
+
+
+.main {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+ 
+ 
+   margin-top: 60px;
+   .form-group input {
+     border-radius: 10px;
+   
+   }
+ }
+
+
+
+.search{
+  margin-bottom: 20px;
+  margin-top: 10px;
+  border-radius: 10px;
+  font-style: bold;
+  border: 1px solid rgb(78, 188, 192);
+}
+.searchlabel{
+  
+ // font-family: 'Times New Roman', Times, serif;
+  font-size: x-large;
+}
+
+
+////////////icon for sorting 
+.bi-sort-alpha-up {
+
+  font-size: 10px;
+}
+.bi-sort-alpha-down{
+  font-size: 10px;
+
+}
+.bi-sort-numeric-up {
+  font-size: 20px;
+}
+.bi-sort-numeric-down {
+  font-size: 20px;
+}
+
+
+   //serch box
+   .searchbox{
+    display: flex;
+    position: relative;
+    justify-content: flex-end;
+    align-items: center;
+
+   }
+   .icon{
+    position: absolute;
+    font-size: 26px;
+   padding-right: 10px;
+   padding-bottom: 10px;
+
+   }
+ 
+   /* Your component.scss or styles.scss file */
+.btn{
+  font-size: large;
+  background-color: cadetblue;
+  color: white;
+  border: none;
+}
+
+
+//modal
+
+.password-input-container {
+  position: relative;
+}
+
+.password-input-container i {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2em;
+  cursor: pointer;
+  color: cadetblue;
+}
+
+.text-danger {
+  color: red;
+  font-size: 0.9em;
+}
+
+input {
+  border-radius: 10px;
+}
+
+label {
+  font-size: 20px;
+}
+
+.leftButton {
+  margin-top: 25px;
+  margin-right: 10px;
+
+}
+.rightButton{
+  margin-top: 25px;
+  margin-left: 10px;
+
+}
+
+.forget a {
+  margin-top: 15px;
+  text-decoration: none;
+}
+
+
+.btn {
+   font-size: large;
+   background-color: cadetblue;
+   padding: 5px 30px;
+   color: white;
+   border: none;
+   margin-top: 20px;
+}
+.spinner-border{
+  color:  cadetblue;
+}
+
+
+.bi-person-fill-dash{
+  cursor: pointer;
+  font-size: 30px;
+}
+.bi-person-fill-check{
+  cursor: pointer;
+  font-size: 30px;
+}
+
+
+.form-check-input {
+cursor: pointer;
+}
+
+.form-check-label {
+margin-left: 10px;
+font-weight: bold;
+}
+
+.form-check-input:checked {
+background-color: cadetblue;
+border-color: cadetblue;
+}
+
+form{
+label{
+ font-weight: bold;
+}
+}

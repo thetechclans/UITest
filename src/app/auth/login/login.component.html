@@ -1,0 +1,175 @@
+<!--<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">DQMS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="containers ">
+    <div class="image">
+        <img class="img" src="../../../dqms/assets/imgs/client-authentication-certificate-feature.jpg" alt="">
+    </div>
+</div>
+
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="text-center">
+                    <h1>Login</h1>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="form">
+                        <div class="form-group">
+                            <label for="username">Email</label>
+                            <input type="text" class="form-control " id="email" placeholder="Enter the Email" formControlName="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+
+                            <div class="password-input-wrapper">
+                                <input type="password" class="form-control" id="password" placeholder="Password"
+                                    [type]="showPassword ? 'text' : 'password'" formControlName="password"  [ngClass]="{'incorrect': incorrectPassword}">
+                                <i class="bi eye-icon" [class.bi-eye-fill]="showPassword"
+                                    [class.bi-eye-slash-fill]="!showPassword" (click)="togglePasswordVisibility()"
+                                    style="cursor: pointer;"></i>
+                                    <div class="password-message" *ngIf="incorrectPasswordMessage">{{ incorrectPasswordMessage }}</div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class=" butt btn btn-light" (click)="login()">Login</button>
+                        </div>
+                        <div class="forget r">
+                            <a class="ftxt" routerLink="Forget-password"><small>Forget Password ?</small></a>
+                            
+                            <!-- <a routerLink="register"> <small>Create New User ? </small></a> 
+                           
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<div
+  class="full-page-container d-flex align-items-center justify-content-center"
+>
+  <div class="background-image-container">
+    <img
+      class="background-image"
+      src="assets/imgs/client-authentication-certificate-feature.jpg"
+      alt="Background Image"
+    />
+    <!-- <img class="background-image" src="../../../dqms/assets/imgs/client-authentication-certificate-feature.jpg" alt="Background Image"> -->
+  </div>
+  <div
+    class="container vh-100 d-flex align-items-center justify-content-center"
+  >
+    <div class="row justify-content-center w-100">
+      <div class="col-md-5">
+        <div class="card shadow">
+          <div class="text-center">
+            <h1>Login</h1>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="form">
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  placeholder="Enter the Username"
+                  formControlName="username"
+                  [ngClass]="{
+                    'is-invalid':
+                      form.get('username')?.invalid &&
+                      form.get('username')?.touched
+                  }"
+                />
+                <div
+                  *ngIf="
+                    form.get('username')?.invalid &&
+                    form.get('username')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Username is Required.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+
+                <div class="password-input-wrapper">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="Password"
+                    [type]="showPassword ? 'text' : 'password'"
+                    formControlName="password"
+                    [ngClass]="{
+                      'is-invalid':
+                        form.get('password')?.invalid &&
+                        form.get('password')?.touched
+                    }"
+                  />
+                  <i
+                    class="bi eye-icon"
+                    [class.bi-eye-fill]="showPassword"
+                    [class.bi-eye-slash-fill]="!showPassword"
+                    (click)="togglePasswordVisibility()"
+                    style="cursor: pointer"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="
+                    form.get('password')?.invalid &&
+                    form.get('password')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Password is Required.
+                </div>
+                <!--<div class="password-message" *ngIf="incorrectPasswordMessage">{{ incorrectPasswordMessage }}</div>-->
+              </div>
+              <div class="d-flex justify-content-center">
+                <button
+                  type="submit"
+                  class="butt btn btn-light"
+                  (click)="login()"
+                >
+                  Login
+                </button>
+              </div>
+              <div class="forget r">
+                <a class="ftxt" routerLink="Forget-password"
+                  ><small>Forget Password ?</small></a
+                >
+
+                <!-- <a routerLink="register"> <small>Create New User ? </small></a>-->
+              </div>
+              <ng-toast [style]="{ width: '300px' }"></ng-toast>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

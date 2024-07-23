@@ -1,0 +1,156 @@
+.main{
+  margin-top: 60px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+input{
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+.btn{
+  font-size: large;
+  background-color: cadetblue;
+  color: white;
+  border: none;
+}
+// create profiling button
+.AButt i{
+  margin-left: 5px;
+ }
+.lbut{
+display: flex;
+justify-content: center;
+
+  .btn-light {
+   margin: 20px;
+}
+
+
+}
+.head{
+  display: flex;
+  justify-content: start;
+  
+}
+
+.table-responsive {
+  margin-left:150px;
+  margin-top: 30px;
+  transition : 1s;
+  overflow-y: scroll 0.5rem;
+  max-height: 525px;
+  max-width:960px;
+     table  {
+    
+    thead {
+      tr{
+        z-index: 1;
+        top: 0;
+        position: sticky;
+
+    }
+    }
+    tr {
+      height: 40px;
+       text-align: center ;
+       
+      
+    }
+
+  }
+}
+.tableButton{
+
+  i{
+    color:cadetblue;
+    padding: 10px;
+    font-size: 22px;
+    //transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    cursor: pointer;
+
+    }
+    i:hover {
+      background-color: #bfcfdf;
+      border-radius: 12px; /* Change to your desired hover color */
+      //transform: scale(1.1); /* Example: Increase size on hover */
+    }
+}
+.AButt i {
+  /* Add styles for the icon here */
+  margin-left: 5px; /* Adjust the spacing between the icon and text */
+}
+.table-responsive .btn {
+  /* Set your desired background color */
+
+   /* Add rounded corners */
+  color:black;
+  border-radius: 14px;
+  background-color:white;
+  font-size: 20px;
+  //padding: 10px;
+  border: none; /* Remove button border if needed */
+  cursor: pointer; /* Add a pointer cursor for better interaction */
+
+  &:hover {
+      background-color:rgb(43, 159, 172); /* Set your desired hover color */
+  }
+
+}
+
+.table thead th {
+  background-color: cadetblue;
+  color: #ffffff; /* Header text color */
+  text-align: center;
+  i{
+    font-size: 22px;
+  }
+}
+
+ ///buttun in table
+
+.dropdown-menu{
+  .dropDownArea{
+    text-align: center;
+    padding: 10px;
+
+    button{
+      border: none;
+      background-color: #ffff;
+      column-gap: 50px;
+      font-size: xx-large;
+      padding: 20px;
+     :hover{
+        background-color: rgb(43, 159, 172);
+        padding: 20px;
+        border-radius: 14px;
+      }
+
+    }
+
+  }
+}
+
+
+label{
+  font-style: bold ;
+  font-size: 20px;
+ // font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}  
+.selectlabel{
+  margin: 10px;
+}
+.butt{
+  margin-right: 20px;
+}
+.containers{
+  font-size: 16px;
+}
+
+
+.card{
+  // margin-top: 10px;
+   background-color: #ffff;border-radius: 14px;
+   height: 800px; 
+   padding: 0;   
+
+ }

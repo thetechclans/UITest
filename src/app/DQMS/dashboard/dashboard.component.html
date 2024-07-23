@@ -1,0 +1,100 @@
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+
+    <div class="row">
+        <label class="text-center headingLabel" for="">Data Quality Management Dashboard</label>
+
+        <div class="cardsDetail d-flex justify-content-between">
+            <div class="card  " style="width: 18rem;">
+                <div class="card-body text-center">
+                    <label class="cardLabel " for=""> Data Source</label>
+                    <div class="innerNumber">
+                        {{ totaldatasource.DataSource}}
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="card  " style="width: 18rem;">
+                <div class="card-body text-center">
+                    <label class="cardLabel " for=""> Data Quality Rules</label>
+                    <div class="innerNumber">
+                        {{ruletotal}}
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="card  " style="width: 18rem;">
+                <div class="card-body text-center">
+                    <label class="cardLabel " for=""> Data Quality Score Cards</label>
+                    <div class="innerNumber">
+                        {{ totaldatasource.DQCard}}
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="card  " style="width: 18rem;">
+                <div class="card-body text-center">
+                    <label class="cardLabel " for=""> Completed Profiling</label>
+                    <div class="innerNumber">
+
+                        {{selectedProfiling}}
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row Charts">
+        <div class="col-3 chart text-center">
+            <label for="" class="chartLabel ">DQ Rules by Status </label>
+            <div>
+                <ngx-charts-bar-horizontal [results]="statuschart" [xAxis]="true" [yAxis]="true" [legend]="false"
+                    [legendPosition]="this.legendPosition" [showXAxisLabel]="true" [showYAxisLabel]="true" 
+                    [xAxisLabel]="'Number of Rules'" [yAxisLabel]="'Rule Types'" [barPadding]="20"
+                    (select)="onSelectbar($event)">
+                </ngx-charts-bar-horizontal>
+            </div>
+
+        </div>
+        <div class="col-4 chart text-center">
+            <label for="" class="chartLabel ">DQ Rules by DQ Domain</label>
+            <div>
+                <ngx-charts-pie-chart [view]="[500, 300]" [results]="rules" [legend]="true"
+                    [legendPosition]="this.legendPosition" [doughnut]="true" [arcWidth]="0.5"
+                    (select)="onSelectpie($event)">
+
+                </ngx-charts-pie-chart>
+
+            </div>
+        </div>
+        <div class="col-3 chart text-center">
+            <label for="" class="chartLabel ">Data Profiling Results By Period </label>
+
+            <div>
+                <ngx-charts-bar-vertical-stacked [view]="[500, 300]" [scheme]="customColorScheme" [results]="profiles"
+                    [gradient]="true" [xAxis]="true" [yAxis]="true" [legend]="true" [showXAxisLabel]="true"
+                    [showYAxisLabel]="true" [xAxisLabel]="'Week Start Date'" [yAxisLabel]="'Profile Completed'"
+                    [animations]="true" [barPadding]="50" [legendPosition]="this.legendPosition"
+                    (select)="onBarSelect($event)">
+                </ngx-charts-bar-vertical-stacked>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+</main>

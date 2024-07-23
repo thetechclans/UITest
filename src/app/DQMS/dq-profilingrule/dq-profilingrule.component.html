@@ -1,0 +1,155 @@
+<main  class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+  <ngx-spinner>
+    <div class="spinner-border " role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+  </ngx-spinner>
+  <ng-toast [style]="{width:'300px'}"></ng-toast>
+    <div class=" d-flex justify-content-between  ">
+      <div class="topic ">
+        <h1 class="label">Data Profiling Management </h1>
+        <p>Choose The Rule for Profiling </p> 
+      </div>
+      <div class="d-flex" >
+        <button class="btn btn-light AButt text-right" [disabled]="!canEdit" (click)="profileNow()">
+          Profile Now
+        </button>
+        <!-- <button id="createprofiling" class="btn btn-light AButt " [routerLink]="'/DQCreateProfiling'" >
+          Create Profiling<i class="bi bi-plus-square-fill"> </i>
+        </button> -->
+        <button id="createprofiling" class="btn btn-light AButt " [disabled]="!canEdit" (click)="createProfilingWithSelectedRuleCode()">
+          Create Profiling
+        </button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <!-- table -->
+        <div class="table-containers">
+          <div class="col">
+           
+            <div class="searchbox">
+              <input type="text" class="form-control search" id="searchTerm" [(ngModel)]="filterData"
+                placeholder="Search" (ngModelChange)=" onInputChanges()" />
+              <div class="icon">
+                <i class="bi bi-search"></i>
+              </div>
+            </div>
+          </div>
+          <div class="table  table-responsive ">
+            <table class="table   table-hover">
+              <thead class="align-middle  ">
+                <tr>
+                  <th style="width: 100px;">
+                    RuleNo
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('ruleno')"></i>
+                  </th>
+  
+                  <th>
+                    Data Element
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dataelement')"></i>
+                  </th>
+                  <th>
+                  Category
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('categorycode__name')"></i>
+                  </th>
+                  <th style="width: 100px;">
+                    Priority 
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('prioritycode__name')"></i>
+                  </th>
+                  <th>
+                    Domain
+
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dqdomaincode__name')"></i>
+                  </th>
+                  <th>
+                  Threshold %
+
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dqthresholdpercentage')"></i>
+                  </th>
+                  <th>Validation Status
+                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('statuscode__name')"></i>
+                  </th>
+                  <th style="width: 100px;">
+                    Profiling
+                    <i class="bi bi-sort-numeric-up"></i>
+                  </th>
+                  <th style="width: 70px;">Select</th>
+                </tr>
+              </thead>
+              <tbody class="align-middle" *ngFor="let dqrule of dqruledetails | filter:editparam ; let i = index"
+              [class.odd]="i % 2 == 0" [class.even]="i % 2 != 0">
+                <tr *ngIf="dqrule.overallvalidationflag === true">
+                <td>{{dqrule.ruleno}}</td>
+                <td>{{dqrule.dataelement}}</td>
+                <td>{{dqrule.categorycode.name}}</td>
+                <td>{{dqrule.prioritycode.name}}</td>
+                <td>{{dqrule.dqdomaincode.name}}</td>
+                <td>{{ dqrule.dqthresholdpercentage }} {{ dqrule.targetresolutiondate | date:'MM/dd/yyyy' }}</td>
+
+                <td>{{dqrule.statuscode.name}}</td>
+                <td>{{dqrule.overallvalidationflag? 'Yes' : 'No'}}</td>
+                  <td>
+                    <div class="form-check d-flex justify-content-center">
+                      <input class="form-check-input" type="radio" name="selectedRule" 
+                      [value]="dqrule.code" 
+                      id="flexCheckDefault_{{ i }}" 
+                      (change)="handleCheckboxChange($event, dqrule.code, dqrule.ruleno)">
+                          <label class="form-check-label" for="flexCheckDefault_{{ i }}"></label>
+                    </div>
+                  </td>
+                </tr> 
+              </tbody>
+            </table>
+          </div>
+          <!-- PAGINATION  
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a class="page-link" (click)="loadPageDQrule('previous')" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item"><a class="page-link" (click)="loadPageDQrule(1)">1</a></li>
+              <li class="page-item"><a class="page-link" (click)="loadPageDQrule(2)">2</a></li>
+              <li class="page-item"><a class="page-link" (click)="loadPageDQrule(3)">3</a></li>
+              <li class="page-item">
+                <a class="page-link" (click)="loadPageDQrule('next')" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>-->
+          <!--<nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a class="page-link" (click)="loadPage('previous')" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item" *ngFor="let pageNumber of getPageNumbers()" [ngClass]="{ 'active': pageNumber === currentpage }">
+                <a class="page-link" (click)="loadPage(pageNumber)">{{ pageNumber }}</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" (click)="loadPage('next')" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>-->
+          <app-pagination
+          [totalPages]="totalPages"
+          [currentPage]="currentpage"
+          (pageChange)="onPageChange($event)">
+        </app-pagination>
+        
+        </div>
+        <div class="d-flex justify-content-center">
+          <button class="btn btn-light " (click)="Back()">Back</button>
+        </div>
+  
+      </div>
+      
+    </div>
+   
+</main>

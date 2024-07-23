@@ -1,0 +1,19 @@
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" #modal>
+  <div class="modal-dialog custom-modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <ng-content></ng-content>
+        <ng-container *ngIf="showIcon">
+         <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="64" height="64" class="tick-icon">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>-->
+          <i class="bi bi-check-circle"></i>
+        </ng-container>
+      </div>
+      <div class="modal-footer" *ngIf="showFooter">
+        <button type="button" class="btn btn-secondary me-2" data-dismiss="modal" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn btn confirm-button" (click)="onConfirm()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>

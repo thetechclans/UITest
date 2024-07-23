@@ -1,0 +1,446 @@
+<ngx-spinner>
+  <div class="spinner-border " role="status">
+      <span class="visually-hidden">Loading...</span>
+  </div>
+</ngx-spinner>
+<app-confirmation-modal #confirmationModal (confirm)="onConfirm()" (cancel)="onCancelDelete()" [showFooter]="true" [showIcon]="false">
+  <h5>Are you sure you want to Delete?</h5>
+</app-confirmation-modal>
+<app-confirmation-modal #successModal  [showFooter]="false" [showIcon]="true">
+  <h5>BusinessRule Deleted successfully!</h5>
+</app-confirmation-modal>
+
+<div *ngIf="!showForm" class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+
+
+  <!-- table.component.html -->
+
+  <div class=" d-flex justify-content-between">
+    <div class="topic">
+      <h1 class="head">Business Rule</h1>
+      <p class="para">Create and manage business rules and business criteria for data quality.
+      </p>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-light AButt" [disabled]="!canEdit" (click)="addNewBusinessRule()">
+        Add New Bussiness Rules<i class="bi bi-plus-square-fill"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+
+      <div class="containers">
+
+        <!-- serch -->
+        <div class="row  ">
+          <div class="col ">
+            <div class="searchbox">
+              <input type="text" class="form-control search" id="searchTerm" placeholder="Search"
+                [(ngModel)]="filterData" (ngModelChange)=" onInputChanges()"/>
+              <div class="icon">
+                <i class="bi bi-search"></i>
+
+              </div>
+            </div>
+          </div>
+
+
+
+
+        </div>
+        <div class="table table-responsive">
+          <table class="table table-hover">
+            <thead class="align-middle">
+              <tr>
+                <th>Rule No
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('ruleno')"></i></th>
+                <th>Data Element
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dataelement')"></i></th>
+                <th>DQ Category 
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('categorycode__name')"></i></th>
+                <th>Priority
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('prioritycode__name')"></i></th>
+                <th>DQ Domain
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dqdomaincode__name')"></i></th>
+                <th>Threshold/Resolution
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dqthresholdpercentage')"></i>
+                </th>
+                <th>Status
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('statuscode__name')"></i></th>
+                <!-- <th> Profiling<i class="bi bi-sort-alpha-up"  (click)="sortTable('')"></i></th> -->
+                <th> Profiling
+                  <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('overallvalidationflag')"></i></th>
+                <th>Manage</th>
+              </tr>
+            </thead>
+            <tbody class="align-middle" >
+              <tr *ngFor="let dqruledetail of dqrulesdetail | filter:editparam; let i = index"
+              [class.odd]="i % 2 == 0" [class.even]="i % 2 != 0" [ngClass]= "{'table-success': dqruledetail.code === editedBusinessId }">
+                <td>{{dqruledetail.ruleno}}</td>
+                <td>{{dqruledetail.dataelement}} </td>
+                <td>{{dqruledetail.categorycode.name}}</td>
+                <td>{{dqruledetail.prioritycode.name}}</td>
+                <td>{{dqruledetail.dqdomaincode.name}}</td>
+                <td style="text-align: center;" >
+                  <span *ngIf="dqruledetail.dqthresholdpercentage != null">{{ dqruledetail.dqthresholdpercentage }}</span>
+                  <span *ngIf="dqruledetail.dqthresholdpercentage == null && dqruledetail.targetresolutiondate != null">{{ dqruledetail.targetresolutiondate | date:'MM/dd/yyyy' }}</span>
+                
+                <td>{{dqruledetail.statuscode.name}}</td>
+                <!-- <td>{{dqruledetail.overallvalidationflag? 'Yes' : 'No'}}</td> -->
+                <td style="text-align: center;"
+                  *ngIf="dqruledetail.ruleno || dqruledetail.dataelement || dqruledetail.categorycode.name || dqruledetail.prioritycode.name || dqruledetail.dqdomaincode.name || dqruledetail.dqthresholdpercentage || dqruledetail.statuscode.name">
+                  {{dqruledetail.overallvalidationflag ? 'Yes' : 'No'}}
+                </td>
+                <td
+                  *ngIf="dqruledetail.ruleno || dqruledetail.dataelement || dqruledetail.categorycode.name || dqruledetail.prioritycode.name || dqruledetail.dqdomaincode.name || dqruledetail.dqthresholdpercentage || dqruledetail.statuscode.name ||
+                  dqruledetail.overallvalidationflag ">
+                  <div class="d-flex tableButton">
+                    <i class="bi bi-pencil-square" ngbTooltip="Edit"  (click)="editBusinessRule(dqruledetail)"></i>
+                    <i class="bi bi-trash-fill" ngbTooltip="Delete" [ngClass]="{'disabled':!canDelete}" (click)="deleteBusinessRule(dqruledetail)"></i>
+                  </div>
+
+                </td>
+
+
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <!-- PAGINATION  
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a class="page-link" (click)="loadPage('previous')" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" (click)="loadPage(1)">1</a></li>
+            <li class="page-item"><a class="page-link" (click)="loadPage(2)">2</a></li>
+            <li class="page-item"><a class="page-link" (click)="loadPage(3)">3</a></li>
+            <li class="page-item">
+              <a class="page-link" (click)="loadPage('next')" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>-->
+        <!--<nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a class="page-link" (click)="loadPage('previous')" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item" *ngFor="let pageNumber of getPageNumbers()" [ngClass]="{ 'active': pageNumber === currentpage }">
+              <a class="page-link" (click)="loadPage(pageNumber)">{{ pageNumber }}</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" (click)="loadPage('next')" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>-->
+        <app-pagination class="pagination justify-content-center"
+  [totalPages]="totalPages"
+  [currentPage]="currentpage"
+  (pageChange)="onPageChange($event)">
+</app-pagination>
+
+
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+
+
+
+
+</div>
+
+<!-- formGrid -->
+<div *ngIf="showForm" class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+
+
+
+  <h2 class="head">{{ headingText }}</h2>
+  <form [formGroup]="form">
+    <div class="card">
+      <div class="card-body">
+
+        <div class="containers ">
+
+          <div class="row">
+
+            <div class="col-sm-9 half form-group">
+              <div class="row">
+                <div class="col-sm-3">
+
+                  <label for="ruleno" class="form-label">Rule No</label>
+                  <input class="form-control" type="text" placeholder="" formControlName="ruleno"
+                    aria-label="default input example" required [ngClass]="{
+                      'is-invalid': form.get('ruleno')?.invalid && (form.get('ruleno')?.touched),
+                    }" >
+                  <div  *ngIf="form.get('ruleno')?.invalid && (form.get('ruleno')?.touched)" class="text-danger">
+                    Please Enter the Rule No.
+                  </div>
+
+
+                </div>
+                <div class="col-sm-9 ">
+
+                  <label for="dataelement" class="form-label">Data Element</label>
+                  <input class="form-control " type="text" placeholder="" formControlName="dataelement" required [ngClass]="{
+                    'is-invalid': form.get('dataelement')?.invalid && (form.get('dataelement')?.touched),
+                  }">
+                  <div *ngIf= "form.get('dataelement')?.invalid && (form.get('dataelement')?.touched)" class="text-danger">
+                    Please Enter the Data Element.
+                  </div>
+
+                </div>
+
+                <div class="col-sm-4 form-group">
+
+                  <label for="Prioritycode" class="form-label">Priority</label>
+                  <!-- <input class="form-control" type="text" placeholder="" aria-label="default input example"> -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <select class="form-select" id="prioritycode" formControlName="prioritycode" [ngClass]="{
+                        'is-invalid': form.get('prioritycode')?.invalid && (form.get('prioritycode')?.touched),
+                      }">
+                        <option *ngFor="let Priority of priority" [value]="Priority.code">{{Priority.name}}</option>
+                        <i class="bi bi-caret-down"></i>
+                      </select>
+                    </div>
+                    <div *ngIf="form.get('prioritycode')?.invalid && (form.get('prioritycode')?.touched)" class="text-danger">
+                      Please Select the Priority.
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-sm-4 form-group">
+
+                  <label for="categorycode" class="form-label">Data Quality Category</label>
+                  <!-- <input class="form-control" type="text" placeholder="" aria-label="default input example"> -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <select class="form-select" id="categorycode" formControlName="categorycode" (change)="onCategoryChange($event)"[ngClass]="{
+                        'is-invalid': form.get('categorycode')?.invalid && (form.get('categorycode')?.touched),
+                      }">
+                        <option *ngFor="let Category of category" [value]="Category.code">{{Category.name}}</option>
+                        <i class="bi bi-caret-down"></i>
+                      </select>
+                      </div>
+                      <div *ngIf="form.get('categorycode')?.invalid && (form.get('categorycode')?.touched)"class="text-danger">
+                        Please Select the Data Quality Category.
+                      </div>
+                  </div>
+
+
+                </div>
+
+                <!--<div class="col-sm-3 form-group">
+                  <label for="dqthresholdpercentage" class="form-label">Target Threshold</label>
+                  <input class="form-control" type="text" placeholder="%(Max 100)"
+                    formControlName="dqthresholdpercentage" aria-label="default input example">
+
+                </div>-->
+                <div class="col-sm-2 form-group"  [hidden]="!showThresholdField" >
+                 
+                  <label for="dqthresholdpercentage" class="form-label">Target Threshold</label>
+                  <input id="dqthresholdpercentage" class="form-control" formControlName="dqthresholdpercentage"
+                    type="number" min="0" max="100"  placeholder="%(Max 100)" appMax100  [ngClass]="{ 'is-invalid': showThresholdField && form.get('dqthresholdpercentage')?.invalid && (form.get('dqthresholdpercentage')?.touched)}">
+
+                           <div *ngIf="form.get('dqthresholdpercentage')?.invalid && form.get('dqthresholdpercentage')?.touched" class="text-danger">Please Enter the Threshold</div>   
+                </div>
+                
+                <div class="col-sm-3 form-group" [hidden]="!showResolutionDateField" >
+                  <label for="targetresolutiondate" class="form-label">Target Resolution Date</label>
+                  <input id="targetresolutiondate" class="form-control" formControlName="targetresolutiondate"
+                    type="date" placeholder="YYYY-MM-DD" [ngClass]="{ 'is-invalid': showResolutionDateField && form.get('targetresolutiondate')?.invalid && (form.get('targetresolutiondate')?.touched) && (form.get('targetresolutiondate')?.dirty)}">
+
+                        <div *ngIf="form.get('targetresolutiondate')?.invalid && form.get('targetresolutiondate')?.touched" class="text-danger">Please Enter the Resolutiondate</div>      
+                </div>
+                
+                <!--  <div class="col-sm-3">
+                  <label for="dbconnectioncode" class="form-label">Data Source</label>
+                  <div class="input">
+                    <select class="form-select" id="datasourcecode" formControlName="datasourcecode" (change)="onDataSourceCode($event)" [ngClass]="{
+                      'is-invalid': form.get('datasourcecode')?.invalid && (form.get('datasourcecode')?.dirty),
+                    }">
+                      <option *ngFor="let datasource of datasources" [value]="datasource.code">{{datasource.name}}</option>
+                      <i class="bi bi-caret-down"></i>
+                      <div class="invalid-feedback">
+                        Please Select the Data Source.
+                      </div>
+                    </select>
+                     Inside the form 
+                    <input type="hidden" formControlName="dbconnectioncode">
+
+
+                  </div>
+
+                 </div>-->
+                <!-- cent -->
+
+                <div class="col-sm-6 form-group">
+                  <label for="ruledefinition" class="form-label">Rule Definition</label>
+                  <!--<textarea class="form-control form-control-lg bigbox" type="text" formControlName="ruledefinition"
+                    [ngClass]="{
+                    'is-invalid': form.get('ruledefinition')?.invalid && (form.get('ruledefinition')?.dirty),
+                  }"></textarea>-->  
+                
+                  <ngx-editor-menu [editor]="ruleEditor" [toolbar]="toolbar"> </ngx-editor-menu>
+                  <div class="editor-container NgxEditor__Wrapper" [ngClass]="{
+                    'is-invalid': form.get('ruledefinition')?.invalid && form.get('ruledefinition')?.touched
+                }">
+                    <ngx-editor [editor]="ruleEditor" formControlName="ruledefinition"> </ngx-editor>
+                    </div>
+                    <div *ngIf="form.get('ruledefinition')?.invalid && form.get('ruledefinition')?.touched" class="text-danger">
+                      Please enter the Rule Definition.
+                    </div>
+                </div>
+
+                <div class="col-sm-6 form-group">
+                  <label for="dqbusinesscriteria" class="form-label">Business Criteria</label>
+                  <!--<textarea class="form-control form-control-lg bigbox" type="text" formControlName="dqbusinesscriteria"
+                    placeholder=""></textarea>-->
+                    <ngx-editor-menu [editor]="businessEditor" [toolbar]="toolbar"> </ngx-editor-menu>
+                    <div class="editor-container NgxEditor__Wrapper">
+                      <ngx-editor classs="editorbox" [editor]="businessEditor" formControlName="dqbusinesscriteria"> </ngx-editor>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 form-group">
+
+                  <label for="businesssystemcode" class="form-label">Impacted System</label>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <select class="form-select" id="businesssystemcode" formControlName="businesssystemcode"
+                        [ngClass]="{
+                        'is-invalid': form.get('businesssystemcode')?.invalid && (form.get('businesssystemcode')?.touched),
+                      }">
+                        <option *ngFor="let business of business" [value]="business.code">{{business.name}}</option>
+                        <i class="bi bi-caret-down"></i>
+                      </select>
+                    </div>
+                    <div *ngIf="form.get('businesssystemcode')?.invalid && form.get('businesssystemcode')?.touched" class="text-danger">
+                      Please Select the Impacted System.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 form-group">
+
+                  <label for="businessstewardname" class="form-label">Business Steward Name </label>
+                  <select class="form-select" id="businessstewardname" formControlName="businessstewardname"
+                  [ngClass]="{
+                  'is-invalid': form.get('businessstewardname')?.invalid && (form.get('businessstewardname')?.touched),
+                }">
+                  <option *ngFor="let role of roles" [value]="role.UserName">{{role.UserName}}</option>
+                  <i class="bi bi-caret-down"></i>
+                </select>
+                  <div *ngIf="form.get('businessstewardname')?.invalid && (form.get('businessstewardname')?.touched)" class="text-danger">
+                    Please select the Business Steward Name.
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!-- sec part -->
+
+            <div class="col-sm-3 half form-group">
+              <label class="form-label">Data Quality Domain</label>
+
+              <div class="col hal">
+                <div class=" d-flex justify-content-center ">
+                  <div class="col-sm-8">
+                    <label for="inputPassword5" class="form-label">DQ Domain </label>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <select class="form-select" id="dqdomaincode" formControlName="dqdomaincode"
+                          (change)="onDomainCodeChange($event)" [ngClass]="{
+                          'is-invalid': form.get('dqdomaincode')?.invalid && (form.get('dqdomaincode')?.touched),
+                        }">
+                          <option *ngFor="let domain of domains" [value]="domain?.code">{{domain.name}}</option>
+                        </select>
+                        <div *ngIf="form.get('dqdomaincode')?.invalid && (form.get('dqdomaincode')?.touched)" class="text-danger">
+                          Please Select the DQ Domain.
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-sm-11 form-group ">
+                  <label for="disabledInput" class="form-label">Domain Description</label>
+                  <textarea class="form-control  dis" type="text" id="description" formControlName="description"
+                    readonly></textarea>
+
+                </div>
+
+
+              </div>
+
+
+              <div class="col-sm-12 form-group">
+                <input type="hidden" formControlName="statuscode" [value]="selectedStatusCode">
+
+                <label for="disabledInput" class="form-label">DQ Rule Status</label>
+                <input class="form-control" type="text" formControlName="statuscode" [value]="selectedStatusName"
+                  readonly>
+
+                <label for="disabledInput" class="form-label">Created Date & Time</label>
+                <input class="form-control readonlydate" type="text" placeholder="" formControlName="rulecreateddate"
+                  aria-label="default input example" readonly>
+
+                <label for="disabledInput" class="form-label">Ready for Profiling</label>
+                <input class="form-control Rp" type="text" placeholder="" formControlName="readyforprofiling"
+                  aria-label="default input example" readonly>
+
+              </div>
+
+
+            </div>
+
+            <div class=" lbut">
+
+              <div class="FisrtFormBut" >
+                <button type="button" class="btn btn-primary "  [disabled]="!canEdit" (click)="saveBusinessRule()">Save</button>
+              </div>
+
+              <div class="Frombut">
+                <button type="button" class="btn btn-primary "   (click)="clear()">Clear</button>
+                <!-- (click)="clear()" -->
+              </div>
+
+
+              <div class="Frombut">
+                <button type="button" class="btn btn-primary" (click)="close()">Close</button>
+              </div>
+            </div>
+
+
+
+
+
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+    <ng-toast [style]="{width:'300px'}"></ng-toast>
+  </form>
+

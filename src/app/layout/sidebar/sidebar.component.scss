@@ -1,0 +1,81 @@
+
+
+  
+  .sidebar {
+    font-size: 1.25rem;
+    position: fixed;
+    margin-top: 56px;
+    top: 0;
+    height: 100vh;
+   // background-color: rgb(67, 89, 94); /* Sidebar background color */
+    background-color: rgb(70, 70, 70); /* Sidebar background color */
+    padding-top: 1rem;
+    overflow-y: auto; /* Enable vertical scrolling */
+    z-index: 1000;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  .sidebar a {
+    color: #ffffff; /* Sidebar link text color */
+  }
+  
+  .sidebar a:hover {
+    color: #e6ecf3; /* Sidebar link hover color */
+  }
+  
+  .sidebar a.active {
+    background-color: #0c0d0f; /* Active link background color */
+    color: #ffffff; /* Active link text color */
+  }
+  
+  
+  .main-content {
+    padding: 10px;
+  
+  }
+  
+  li{
+
+    align-items: center;
+      i{
+        color:rgb(93, 220, 224);
+        font-size: 24px;
+      }
+        display: flex;
+       padding-left: 10px;
+        padding: 3px;
+        text-align: left;
+        border-bottom: solid white 1px;;
+        border-radius: 2px;
+    }
+  
+  /* Adjustments for smaller screens */
+  @media (max-width: 767.98px) {
+    .sidebar {
+      width: 100%; /* Full width on small screens */
+      position: static; /* Remove fixed position */
+      margin-top: 0; /* Remove top margin */
+      height: auto; /* Allow content to determine height */
+    }
+  
+    .sidebar a {
+      display: block;
+      padding: 10px; /* Add padding for touch-friendly areas */
+      text-align: center; /* Align text to the left */
+      //border-bottom: solid white 1px;
+      
+    }
+  
+    .sidebar a:hover {
+      background-color: #007bff; /* Change background color on hover */
+      color: #ffffff; /* Change text color on hover */
+    }
+  
+    .sidebar a.active {
+      background-color: #007bff; /* Active link background color */
+      color: #ffffff; /* Active link text color */
+    }
+    
+    
+  }
+  

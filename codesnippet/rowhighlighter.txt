@@ -1,0 +1,75 @@
+component.ts 
+
+//intialize this variable in above class
+
+ editedDatasourceId: number | null = null;
+
+// within save and edit function add a single line 
+
+saveBusinessRule() {
+  this.markFormGroupTouched(this.form)
+  if (this.canEdit) {
+  if (!this.showThresholdField) {
+    this.form.get('dqthresholdpercentage')?.clearValidators();
+    this.form.get('dqthresholdpercentage')?.updateValueAndValidity();
+  }
+  if (!this.showResolutionDateField) {
+    this.form.get('targetresolutiondate')?.clearValidators();
+    this.form.get('targetresolutiondate')?.updateValueAndValidity();
+  }
+  if (this.form.valid /*&&(this.showThresholdField && this.form.get('dqthresholdpercentage')?.valid) || 
+(this.showResolutionDateField && this.form.get('targetresolutiondate')?.valid)*/)  {
+    const formData = this.form.value;
+
+    // Ensure the statusCode is updated
+    formData.statuscode = this.selectedStatusCode;
+    if (formData.code) {
+      const resolutionDateControl = this.form.get('targetresolutiondate');
+    if (!resolutionDateControl || !this.showResolutionDateField || !resolutionDateControl.value) {
+      formData.targetresolutiondate = null; 
+    }
+    
+      this.srvdqrule.updateDQRule(formData).subscribe(
+        response => {
+          this.showUpdate(); 
+        },
+        error => {
+          this.showNOtupdate(); 
+        }
+      );
+    } else {
+      const resolutionDateControl = this.form.get('targetresolutiondate');
+    if (!resolutionDateControl || !this.showResolutionDateField || !resolutionDateControl.value) {
+      formData.targetresolutiondate = null; // Set to null if not visible or not entered
+    }
+    formData.ruleno = this.nextRuleNumber;
+      this.srvdqrule.addDQRule(formData).subscribe(
+        response => {
+          this.showSuccess(); 
+          this.form.patchValue({ code: response.code });
+         
+         // this.form.patchValue({ ruleno: 'DQ' + this.padNumber(this.patternNumber, 4) });
+        },
+        error => {
+          
+          this.showError(); 
+        }
+      );
+    }
+    this.editedBusinessId = formData.code;     ====> use the variable assign code value
+  } else {
+    this.showInvalid(); // Display validation error message
+  }
+}else {
+  this.showSuccessP();
+  console.log('User does not have write permission for app:', this.appName);
+}
+}
+
+HTML
+
+// add this line within the <tr> 
+
+ [ngClass]= "{'table-success': datasource.code === editedBusinessId }" 
+
+

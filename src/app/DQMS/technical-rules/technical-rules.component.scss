@@ -1,0 +1,384 @@
+/* Custom styles for the table */
+.table {
+  margin-bottom: 0; /* Remove default table margin */
+}
+
+.table thead th {
+  // background-color: #1f7d8a; /* Header background color */
+ // background-color: rgb(49 57 67 / 38%);
+  background-color: cadetblue;
+  color: #ffffff; /* Header text color */
+  //text-align: center;
+  i{
+    color: #ffffff;   // scss
+    font-size: 22px;
+  }
+}
+/*th{
+  i{
+    color: #ffffff;   // scss
+    font-size: 22px;
+  }
+}*/
+.head{
+  font-style: bold ;
+  font-size: 30px;
+  color: rgb(56, 78, 83);
+}
+.container{
+  //font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #dee2e6; /* Table cell border */
+}
+
+/* Custom styles for the "Add New Data Source" button */
+
+
+.lbut{
+  display: flex;
+  justify-content: center;
+  margin-right: 20px;
+  margin-top: 8px;
+   .btn-s {padding: 4px 30px;
+    font-size: large;
+    background-color: cadetblue;
+    margin-left: 20px;
+    color: white;
+  }
+  .btn-d{
+    padding: 4px 30px;
+    font-size: large;
+    margin-left: 20px;
+    background-color: cadetblue;
+  color: white;}
+
+}
+
+//pagination
+.pagination{
+  margin-top: 10px;
+}
+.pagination .page-item .page-link {
+  color:  cadetblue;
+}
+.page-link{
+  cursor:pointer;
+}
+//button edit in table
+/* Custom styling for the Bootstrap icon within the button */
+button.btn {
+  display: flex;
+  align-items: center;
+}
+
+button.btn .bi {
+  margin-right: 5px; /* Adjust spacing as needed */
+  font-size: x-large;
+}
+
+.label{
+
+font-style: bold ;
+font-size: 30px;
+color: rgb(56, 78, 83);
+
+
+}
+// Add this to your component's SCSS file
+.acctop{
+  right: 5%;
+  position: absolute;  
+} 
+
+
+.form-group {
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }}
+.table-responsive {
+transition : 1s;
+  overflow-y: auto;
+  max-height: 540px;
+  
+  
+
+  table  {
+    tbody{
+      tr{
+        height: 50px;
+        td{
+          text-align: center;
+        }
+      }
+    }
+    thead {
+      tr{
+        
+        z-index: 1;
+        top: 0;
+        position: sticky;
+      th{
+        text-align: center;
+        width: calc(100% / 10);
+      }
+        
+    }
+    }
+    tr {
+      height: 40px;
+      
+    }
+    
+
+  }
+}
+
+.card{
+  //margin-top: 10px;
+  background-color: #ffff;
+ // height:820px;    
+  
+}
+
+
+
+.table-responsive button {
+    background-color: white; /* Set your desired background color */
+    color: black; /* Set your desired text color */
+    padding: 10px 20px; /* Add padding for better appearance */
+    border-radius: 60px; /* Add rounded corners */
+    display: flex;
+    align-items: center;
+    border: none; /* Remove button border if needed */
+    cursor: pointer; /* Add a pointer cursor for better interaction */
+
+    &:hover {
+         background-color:cadetblue; /* Set your desired hover color */
+    }
+
+    mat-icon {
+        font-size: 1.5rem; /* Adjust the icon size */
+        margin-right: 8px; /* Add some space between the icon and text */
+    }
+}
+
+////////////////////////////////////////////////////////
+/// tech rule mangement
+.main{
+  margin-top: 60px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+  
+  
+}
+
+
+/* Your component.scss or styles.scss file */
+.btn{
+  font-size: large;
+  background-color: cadetblue;
+  color: white;
+  border: none;
+}
+.lbut{
+display: flex;
+justify-content: center;
+
+  .btn-light {
+   //padding: 4px 30px;
+   margin: 20px;
+  
+ 
+  
+}
+
+
+}
+
+.textarea{
+  font-family: Consolas, Courier New, Lucida Console;
+
+}
+.textarea-l{
+
+  height: 170px ;
+}
+
+
+.textarea-m{
+
+  height: 120px ;
+  margin-top: 32px;
+}
+
+h1{
+  font-size: 1.5rem;
+}
+
+.button {
+
+  .btn-group{
+
+      margin-top: 30px;
+  }
+}
+.btn-group{
+
+  padding-right: 30px;
+  padding-top: 25px;
+}
+
+.accordion{
+  margin-top: 15px;
+ 
+  
+}
+.spinner-border{
+  color:  cadetblue;
+}
+
+.card .a{
+  //margin-top: 15px;
+  background-color:  #b7b9b7;
+ 
+  
+}
+
+
+/* Responsive styles for various screen sizes */
+@media (max-width: 767.98px) {
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+    
+    .row {
+      flex-direction: column;
+
+      .col-sm-2,
+      .col-sm-6,
+      .col-sm-4 {
+        width: 100%;
+      }
+    }
+  }
+}
+
+////////////icon for sorting 
+.bi-sort-alpha-up {
+
+  font-size: 10px;
+}
+.bi-sort-alpha-down{
+  font-size: 10px;
+
+}
+.bi-sort-numeric-up {
+  font-size: 20px;
+}
+.bi-sort-numeric-down {
+  font-size: 20px;
+}
+
+   //serch box
+   .searchbox{
+    display: flex;
+    position: relative;
+    justify-content: flex-end;
+    align-items: center;
+
+   }
+   .icon{
+    position: absolute;
+    font-size: 26px;
+   padding-right: 10px;
+   padding-bottom: 10px;
+
+   }
+ 
+   
+
+.search{
+  margin-bottom: 20px;
+  margin-top: 5px;
+  border-radius: 10px;
+  font-style: bold;
+  border: 1px solid rgb(78, 188, 192);
+}
+.searchlabel{
+  
+  
+  font-size: x-large;
+}
+
+///for top radio button near dropdown
+
+.dropdowns{
+  margin-top: 10px;
+
+  .radiobutt{
+    .form-check-label{
+      font-style: normal !important;
+
+    }
+    
+   .r{
+    margin: 5px
+    ;
+   }
+  }
+}
+
+/* Container for the line and text */
+.profile-container {
+  text-align: start;
+  margin-bottom: 20px;
+}
+
+/* Solid line */
+.solid-border {
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: start;
+  height: 100px;
+}
+
+/* Text */
+.profile-text {
+  color: #0b0f11;
+  font-weight: bold !important;
+  /* Text color */
+  font-size: 18px;
+  /* Font size */
+  //font-family: Arial, sans-serif;
+  /* Font family */
+  margin-top: -20px;
+  /* Adjust margin to position the text */
+  background-color: white;
+  /* Optional: Add a background color to the text */
+  padding: 0 8px;
+  /* Optional: Add padding to the text */
+}
+.success {
+  border-color: green; /* Apply green border for success */
+  color: green;
+}
+
+.failed {
+  border-color: red; /* Apply red border for failure */
+  color: red;
+}
+.NgxEditor__Wrapper{
+  overflow-y: auto;
+  height:250px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.pagination .page-item .page-link {
+color: cadetblue;
+}

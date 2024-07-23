@@ -1,0 +1,336 @@
+<div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+    <!-- Your page content goes here -->
+    <!-- <app-data-source></app-data-source> -->
+    <div class=" d-flex justify-content-between">
+
+        <div class="topic">
+            <h1 class="head">User Management</h1>
+            <p class="para">Management of DQMS Groups and Users</p>
+        </div>
+        <div class="text-right">
+            <button class="btn btn-light AButt" (click)="openSecondModal()">
+                Add New User<i class="bi bi-plus-square-fill"></i>
+            </button>
+        </div>
+
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="containers container ">
+                <!-- serchbar -->
+                <div class="row  ">
+                    <div class="col ">
+                        <div class="searchbox">
+                            <input type="text" class="form-control search" id="searchTerm" placeholder="Search"
+                                [(ngModel)]="filterData" (ngModelChange)=" onInputChanges()" />
+                            <div class="icon">
+                                <i class="bi bi-search"></i>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table  table-responsive ">
+
+                    <table class="table  table-hover ">
+                        <thead class="align-middle  ">
+                            <tr>
+                                <th style="text-align: center;">
+                                    Email
+                                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('email')"></i>
+
+                                </th>
+                                <th>
+                                    User Name
+                                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('username')"></i>
+
+                                </th>
+                                <th>
+                                    Role Type
+                                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('rolecode__name')"></i>
+
+                                </th>
+                                <th>
+                                    User Mobile
+                                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('usermobile')"></i>
+
+
+                                </th>
+                                <th>
+                                    Last Login
+                                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('last_login')"></i>
+
+                                </th>
+                                <th>
+                                    Status
+
+
+
+
+                                </th>
+                                <th>
+                                    Manage
+
+
+
+                                </th>
+
+                        </thead>
+                        <tbody class="align-middle " *ngFor="let user of users | filter:editparam ; let i = index">
+                            <!-- Add your table rows dynamically from your Angular component -->
+                            <tr  [ngClass]= "{'table-success': user.id === editedUserId }">
+
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.rolecode?.name }}</td>
+                                <td>{{ user.usermobile }}</td>
+                                <td>{{ user.last_login }}</td>
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <i *ngIf="user.is_active" class="bi bi-person-fill-check  text-success" ngbTooltip="Active"></i>
+                                        <i *ngIf="!user.is_active" class="bi bi-person-fill-dash  text-danger" ngbTooltip="Inactive"></i>
+                                      </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center tableButton">
+
+                                        <i class="bi bi-pencil-square" ngbTooltip="Edit"
+                                            (click)="openEditModal(user)"></i>
+                                    </div>
+                                </td>
+
+                                <!-- <td>{{ user.last_login ? user.last_login : 'Never' }}</td> -->
+
+                            </tr>
+
+                            <!-- Add more rows as needed -->
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+            <app-pagination
+            [totalPages]="totalPages"
+            [currentPage]="currentpage"
+            (pageChange)="onPageChange($event)">
+          </app-pagination>
+
+        </div>
+    </div>
+
+
+</div>
+<ng-toast [style]="{width:'300px'}"></ng-toast>
+
+<!-- modal 1 -->
+<div class="modal fade" id="NewConnectionModal" #newConnectionModal tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog  modal-lg  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="text-center">Register</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="Close()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="form">
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Email</label>
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" tabindex="1" placeholder="Email"
+                                    formControlName="email"  [class.is-invalid]="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)">
+                            </div>
+                            <div *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)" class="invalid-feedback"  class="text-danger">
+                                <div *ngIf="form.get('email')?.errors?.['required']"  class="text-danger">Email is required.</div>
+                                <div *ngIf="form.get('email')?.errors?.['email']"  class="text-danger">Invalid email format.</div>
+                        </div></div>
+                        <div class="col-6">
+                            <div><label>Username</label></div>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Username" tabindex="2"
+                                    formControlName="username" [ngClass]="{
+                            'is-invalid': form.get('username')?.invalid && (form.get('username')?.touched)
+                        }">
+                            </div>
+                            <div *ngIf="form.get('username')?.invalid && form.get('username')?.touched"
+                                class="text-danger">Please Enter the Username</div>
+                        </div></div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div><label>Role</label></div>
+                            <div class="input-group mb-3">
+                                <select class="form-select" id="rolecode" tabindex="3" formControlName="rolecode"
+                                    [ngClass]="{
+                            'is-invalid': form.get('rolecode')?.invalid && (form.get('rolecode')?.touched)
+                        }">
+                                    <option value="" disabled>Select the Role</option>
+                                    <option *ngFor="let role of roles" [value]="role.code">{{role.name}}</option>
+                                    <i class="bi bi-caret-down"></i>
+                                </select>
+                            </div>
+                            <div *ngIf="form.get('rolecode')?.invalid && form.get('rolecode')?.touched"
+                                class="text-danger">Please Select the Role</div></div>
+                                <div class="col-6">
+                            <div><label>Password</label></div>
+                            <div class="password-input-container pass">
+                                <input type="password" class="form-control" id="userpassword" tabindex="4"
+                                    placeholder="Password" [type]="showPassword ? 'text' : 'password'"
+                                    formControlName="userpassword" [class.is-invalid]="
+                             form.get('userpassword')?.invalid && (form.get('userpassword')?.touched || form.get('userpassword')?.dirty)">
+                                <i class="bi" [class.bi-eye-fill]="showPassword"
+                                    [class.bi-eye-slash-fill]="!showPassword" (click)="togglePasswordVisibility()"
+                                    style="cursor: pointer;"></i>
+                            </div>
+                            <div *ngIf="form.get('userpassword')?.invalid && (form.get('userpassword')?.touched || form.get('userpassword')?.dirty)"
+                                class="text-danger">  <div *ngIf="form.get('userpassword')?.errors?.['required']">Password is required</div>
+                                <div *ngIf="form.get('userpassword')?.errors?.['minlength']">Password must be at least 8 characters</div>
+                                <div *ngIf="form.get('userpassword')?.errors?.['pattern']">Password must include uppercase, lowercase, number, and special character</div></div>
+                        </div></div>
+                        <div class="row">
+                        <div class="col-6">
+                            <div><label>Mobile Number</label></div>
+                            <div class="input-group mb-3">
+                                <input  type="tel" class="form-control" placeholder="Mobile Number"
+                                maxlength="10"
+                                pattern="[0-9]*"
+                                (keypress)="restrictNonNumeric($event)"
+                                (input)="restrictToTenDigits()" tabindex="5"
+                                    formControlName="usermobile" [ngClass]="{
+                            'is-invalid': form.get('usermobile')?.invalid && (form.get('usermobile')?.touched)
+                        }">
+                            </div>
+                            <div *ngIf="form.get('usermobile')?.invalid && form.get('usermobile')?.touched"
+                                class="text-danger">Please Enter the Mobile Number</div>
+                                </div>
+                                <div class="col-6">
+                            <div><label>Confirm Password</label></div>
+                            <div class="password-input-container pass">
+                                <input type="password" class="form-control" id="confirm_password" tabindex="6"
+                                    placeholder="Password" [type]="showConfirmPassword ? 'text' : 'password'"
+                                    formControlName="userpassword2" [ngClass]="{
+                            'is-invalid': form.get('userpassword2')?.invalid && (form.get('userpassword2')?.touched)
+                        }">
+                                <i class="bi" [class.bi-eye-fill]="showConfirmPassword"
+                                    [class.bi-eye-slash-fill]="!showConfirmPassword"
+                                    (click)="toggleConfirmPasswordVisibility()" style="cursor: pointer;"></i>
+                            </div>
+                            <div *ngIf="form.get('userpassword2')?.invalid && form.get('userpassword2')?.touched"
+                                class="text-danger"><div *ngIf="form.get('userpassword2')?.errors?.['required']">Confirm Password is required</div>
+                                <div *ngIf="form.get('userpassword2')?.errors?.['mustMatch']">Passwords must match</div></div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="liveToastBtn"  (click)="register()">Register
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="exit()">Exit</button>
+                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1"  (click)="back()"
+          >Back
+        </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- modal 2 -->
+<div class="modal fade" id="editUserModal" #editUserModal tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog  modal-lg  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="text-center">Edit User : {{selectedUser?.username}}</h3>
+
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="formEdit">
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Email</label>
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" tabindex="1" placeholder="Email"
+                                    formControlName="email" [ngClass]="{
+                            'is-invalid': formEdit.get('email')?.invalid && (formEdit.get('email')?.touched)
+                        }">
+                            </div>
+                            <div *ngIf="formEdit.get('email')?.invalid && formEdit.get('email')?.touched" class="text-danger">
+                                Please Enter the Email</div>
+                        </div>
+                        <div class="col-6">
+                            <div><label>Username</label></div>
+                            <input type="text" class="form-control" placeholder="Username"  placeholder="{{selectedUser?.username}}"  disabled>
+                            <!-- <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Username" tabindex="2" [disabled]="!isDisabled"   
+                                    formControlName="username" [disabled]="true" [ngClass]="{
+                            'is-invalid': formEdit.get('username')?.invalid && (formEdit.get('username')?.touched)
+                        }">
+                            </div>
+                            <div *ngIf="formEdit.get('username')?.invalid && formEdit.get('username')?.touched"
+                                class="text-danger">Please Enter the Username</div> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div><label>Roles</label></div>
+                            <div class="input-group mb-3">
+                                <select class="form-select" id="rolecode" tabindex="3" formControlName="rolecode"
+                                    [ngClass]="{
+                            'is-invalid': formEdit.get('rolecode')?.invalid && (formEdit.get('rolecode')?.touched)
+                        }">
+                                    <option value="" disabled>Select the Role</option>
+                                    <option *ngFor="let role of roles" [value]="role.code">{{role.name}}</option>
+                                    <i class="bi bi-caret-down"></i>
+                                </select>
+                            </div>
+                            <div *ngIf="formEdit.get('rolecode')?.invalid && formEdit.get('rolecode')?.touched"
+                                class="text-danger">Please Select the Role</div>
+
+                        </div>
+                        <div class="col-6">
+                            <div><label>Mobile Number</label></div>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Mobile Number" tabindex="4"
+                                    formControlName="usermobile" [ngClass]="{
+                            'is-invalid': formEdit.get('usermobile')?.invalid && (formEdit.get('usermobile')?.touched)
+                        }">
+                            </div>
+                            <div *ngIf="formEdit.get('usermobile')?.invalid && formEdit.get('usermobile')?.touched"
+                                class="text-danger">Please Enter the Mobile Number</div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Active Status</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="activeStatus" formControlName="is_active"
+                                    [checked]="selectedUser?.is_active" (change)="toggleActiveStatus()">
+                                <label class="form-check-label" for="activeStatus">{{ selectedUser?.is_active ? 'Active'
+                                    : 'Inactive' }}</label>
+                            </div>
+
+                        </div>
+                    </div>
+                       
+
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="liveToastBtn"  data-bs-dismiss="modal" (click)="updateUser()">Update 
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
+                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1"  (click)="back()"
+          >Back
+        </button> -->
+            </div>
+        </div>
+    </div>
+</div>

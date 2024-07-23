@@ -1,0 +1,52 @@
+.custom-modal-dialog {
+    max-width: 30%; 
+    margin: 1.75rem auto; 
+    border-radius: 0 !important;
+    max-height: 90%;
+  }
+  
+  .custom-modal-content {
+    border: 1px solid #ccc; /* Add a border around the modal */
+    border-radius: 0; /* Ensure no border radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    height: 80%;
+  }
+  
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 150px;}
+  
+  .tick-icon {
+    fill: #28a745; /* Change color as needed */
+    transition: transform 0.3s ease-out; /* Example transition */
+  }
+  
+  .tick-icon.animate {
+    transform: scale(1.2); /* Example animation */
+  }
+  i{
+    font-size: 70px;
+    justify-content: center;
+    align-items: center;
+    color: #28a745;
+  }
+  
+  .modal-content {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); 
+  }
+
+  .confirm-button {
+    background-color: rgb(95, 158, 160);
+    border-color: green;
+  }
+  
+  .confirm-button:hover {
+    background-color: darkgreen;
+    border-color: darkgreen;
+  }
+  
+  

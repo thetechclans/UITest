@@ -1,0 +1,209 @@
+create a reusable component for pagination:
+
+HTML:
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="loadPage('previous')" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item" *ngFor="let pageNumber of pageNumbers" 
+          [ngClass]="{ 'active': pageNumber === currentPage, 'disabled': pageNumber === '...' }">
+        <a class="page-link" (click)="loadPage(pageNumber)" *ngIf="pageNumber !== '...'">{{ pageNumber }}</a>
+        <span class="page-link" *ngIf="pageNumber === '...'">{{ pageNumber }}</span>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="loadPage('next')" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  
+  component.ts:
+
+  import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+
+@Component({
+  selector: 'app-pagination',
+  templateUrl: './pagination.component.html',
+  styleUrls: ['./pagination.component.scss']
+})
+export class PaginationComponent implements OnChanges{
+  @Input() totalPages: number = 1;
+  @Input() currentPage: number = 1;
+  @Output() pageChange = new EventEmitter<number>();
+
+  pageNumbers: (number | string)[] = [];
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['totalPages'] || changes['currentPage']) {
+      this.updatePageNumbers();
+    }
+  }
+ 
+  updatePageNumbers(): void {
+    const maxPagesToShow = 10;
+    const pageNumbers = [];
+
+    if (this.totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      if (this.currentPage <= Math.ceil(maxPagesToShow / 2)) {
+        // Display first 10 pages
+        for (let i = 1; i <= maxPagesToShow; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(this.totalPages);
+      } else if (this.currentPage >= this.totalPages - Math.floor(maxPagesToShow / 2)) {
+        // Display last 10 pages
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = this.totalPages - maxPagesToShow + 2; i <= this.totalPages; i++) {
+          pageNumbers.push(i);
+        }
+      } else {
+        // Display pages around the current page
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = this.currentPage - Math.floor(maxPagesToShow / 2); i <= this.currentPage + Math.floor(maxPagesToShow / 2); i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(this.totalPages);
+      }
+    }
+
+    this.pageNumbers = pageNumbers;
+  }
+
+  
+
+  loadPage(page: number | string): void {
+    if (typeof page === 'number' && page !== this.currentPage) {
+      this.pageChange.emit(page);
+    } else if (page === 'previous' && this.currentPage > 1) {
+      this.pageChange.emit(this.currentPage - 1);
+    } else if (page === 'next' && this.currentPage < this.totalPages) {
+      this.pageChange.emit(this.currentPage + 1);
+    }
+  }
+
+  
+
+}
+
+//how to use the above reusable pagination component in other component 
+
+Model:
+
+// create a interface based on the api structure
+
+export interface dqRuleMdlInfpage{
+    count: number;
+    page_count: number;
+    next: string;
+    previous: string;
+ }
+
+component.ts :
+
+//initialize the variable above the class
+
+ totalPages: number = 0;
+ currentpage: number = 1; 
+
+// call this in ngOninit
+
+  this.getDqRulePage(this.currentpage);
+
+//add this function inside class
+
+getDqRulePage(page: number){
+  this.srvdqrule.getDqRuleDetailPage(page).subscribe((data:any)=> {
+
+    console.log("page",data);
+    this.totalPages=data.page_count;
+    this.currentpage = page;
+    if (data) {
+      const page_count = data.page_count;
+      console.log("Page count:", data.page_count);
+  } else {
+      console.log("Data is undefined");
+  }
+  })
+}
+
+// add page as a arguement in below function call this function also in ngOninit
+
+getDqruleDetail(page: number ){
+  let ordering = this.currentSortField ? `${this.currentSortOrder}${this.currentSortField}` : null;
+  this.spinner.show();
+  this.srvdqrule. getDQRuleDetailCurrent(page,ordering,this.filterData).subscribe(data=>{
+   this.spinner.hide();
+   console.log('i want',data)
+   //this.dqrulesdetail = data;
+      // Check if there are records
+      if (data && data.length > 0) {
+        this.dqrulesdetail = data;
+        } else {
+         this.dqrulesdetail = Array(10).fill({
+          code: '',
+          ruleno: '',
+          dataelement: '',
+          categorycode: '',
+          prioritycode: '',
+          dqdomaincode: '',
+          dqthresholdpercentage: null,
+          statuscode: '',
+          overallvalidationflag: ''
+        });
+      }
+      },error => {
+        this.spinner.hide();
+    }); 
+ }
+
+ HTML:
+
+ //add this below table tag 
+
+ <app-pagination
+  [totalPages]="totalPages"
+  [currentPage]="currentpage"
+  (pageChange)="onPageChange($event)">
+</app-pagination>
+
+
+service:
+
+// pass the page as arguement in below function
+
+ getDQRuleDetailCurrent(page: number | null = null,ordering: string | null = null,searchTerm: string = ''): Observable<dqruleDetailMdl[]> {
+    let url = `${this.apiService}${this.endpointDetailcurrent}`;
+    
+    const params = new URLSearchParams();
+
+    if (searchTerm) {
+        params.append('search', searchTerm);
+    }else if (page !== null ) {
+        params.append('page', page.toString());
+    }
+
+    if (ordering !== null) {
+        params.append('ordering', ordering);
+    }
+
+    if (params.toString()) {
+        url += `?${params.toString()}`;
+    }
+    return this.http
+      .get(url)
+      .pipe(
+        map((data: any) => data.results),
+      );
+  }

@@ -1,0 +1,137 @@
+<app-confirmation-modal #confirmationModal (confirm)="onConfirm()" (cancel)="onCancelDelete()" [showFooter]="true" [showIcon]="false">
+    <h5>Are you sure you want to Delete?</h5>
+  </app-confirmation-modal>
+  <app-confirmation-modal #successModal  [showFooter]="false" [showIcon]="true">
+    <h5>Reference Data Deleted successfully!</h5>
+  </app-confirmation-modal>
+<div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+    <div class=" d-flex justify-content-between">
+        <div class="topic ">
+            <h1 class="head">Reference Data</h1>
+            <!--<p class="para">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem consequuntur temporibus
+                ipsam
+                ex! Neque rerum dolorem atque aperiam nobis quis.</p>-->
+
+
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="containers">
+                <div class="container md5">
+                    <!-- drop down -->
+                    <div class=" head">
+<div class="butt">
+    <label class="selectlabel " for="lookup">Lookups </label>
+
+</div>
+                        <div class="col-4 butt">
+                            <select class="form-select" aria-label="Default select example"
+                                (change)="onChangeOfSelectedTable($event)">
+                                <option>Select the Lookup</option>
+                                <option *ngFor="let lookup of  lookups" [value]="lookup?.name">{{lookup.name}}</option>
+                            </select>
+                        </div>
+                        <!-- table -->
+                        <div class="butt">
+                            <button class="btn btn-light AButt" [disabled]="!canEdit ||  !isValidSelection()" (click)="addNewRow()">
+                                Add New <i class="bi bi-plus-square-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table  table-responsive ">
+
+                        <table class="table   table-hover">
+                            <thead class="align-middle  ">
+                                <tr>
+                                    <th>
+                                        Code
+                                        <i class="bi bi-sort-alpha-up" (click)="sortTable('code')"></i>
+                                    </th>
+
+                                    <th>
+                                        Name
+                                        <i class="bi bi-sort-alpha-up" (click)="sortTable('name')"></i>
+                                    </th>
+                                    <ng-container *ngIf="selectedReferenceTable === 'DQDomain'">
+                                        <th>Description
+                                            <i class="bi bi-sort-alpha-up" (click)="sortTable('description')"></i>
+                                        </th>
+                                    </ng-container>
+                                    <th>Manage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf="addingNew">
+                                    <td></td>
+                                    <td><input type="text" class="form-control" [(ngModel)]="newRow.name"></td>
+                                    <ng-container *ngIf="selectedReferenceTable === 'DQDomain'">
+                                        <td><input type="text" class="form-control" [(ngModel)]="newRow.description">
+                                        </td>
+                                    </ng-container>
+                                    <td>
+                                        <div class="tableButton d-flex justify-content-center">
+                                            <i class="bi bi-plus-square-fill" ngbTooltip="Save"
+                                            [ngClass]="{'disabled':!canEdit}"  (click)="saveRow(newRow)"></i>
+                                            <i class="bi bi-x-square-fill" ngbTooltip="Cancel" (click)="cancelAdd()"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Display existing data -->
+                                <tr *ngFor="let data of referencesdata; let i = index">
+                                    <td> <ng-container *ngIf="editingRowIndex !== i; "><!--else editMode-->
+                                            {{ data.code }}
+                                        </ng-container>
+                                       <!-- <ng-template #editMode>
+                                            <input type="text" class="form-control" [(ngModel)]="data.code">
+                                        </ng-template>-->
+                                    </td>
+                                    <td> <ng-container *ngIf="editingRowIndex !== i; else editModeName">
+                                            {{ data.name }}
+                                        </ng-container>
+                                        <ng-template #editModeName>
+                                            <input type="text" class="form-control" [(ngModel)]="data.name">
+                                        </ng-template>
+                                    </td>
+                                    <ng-container *ngIf="selectedReferenceTable === 'DQDomain'">
+                                        <td>
+                                            <ng-container *ngIf="editingRowIndex !== i; else editModeDesc">
+                                                {{ data.description || '-' }}
+                                            </ng-container>
+                                            <ng-template #editModeDesc>
+                                                <input type="text" class="form-control" [(ngModel)]="data.description">
+                                            </ng-template>
+                                        </td>
+                                    </ng-container>
+                                    <td>
+                                        <div class="tableButton d-flex justify-content-center">
+                                            <ng-container *ngIf="editingRowIndex !== i">
+                                                <i class="bi bi-pencil-square" ngbTooltip="Edit"
+                                                [ngClass]="{'disabled':!canEdit || selectedReferenceTable === 'DQDomain'}"   (click)="editRow(i)"></i>
+                                            </ng-container>
+                                            <ng-container *ngIf="editingRowIndex === i">
+                                                <i class="bi bi-check-square-fill" ngbTooltip="update"
+                                                    (click)="saveEdit(data)"></i>
+                                                <i class="bi bi-x-square-fill" ngbTooltip="Cancel"
+                                                    (click)="cancelEdit()"></i>
+                                            </ng-container>
+                                            <i class="bi bi-trash-fill" ngbTooltip="Delete"
+                                            [ngClass]="{'disabled':!canDelete || selectedReferenceTable === 'DQDomain'}"  (click)="deleteRow(data.code)"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                </div>
+                <ng-toast [style]="{width:'300px'}"></ng-toast>
+
+            </div>
+        </div>
+
+    </div>

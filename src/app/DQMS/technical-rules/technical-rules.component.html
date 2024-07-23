@@ -1,0 +1,545 @@
+<div *ngIf="!showForm" class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+    <ngx-spinner>
+        <div class="spinner-border " role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+      </ngx-spinner>
+    <!-- table.component.html -->
+    <h1 class="head">Technical Rules Management</h1>
+    <p class="para">Update technical expressions to validate the business rules in the respective data sources.
+
+    </p>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <!-- serchbar -->
+                <div class="row  ">
+                    <div class="col ">
+                      
+                        <div class="searchbox">
+                            <input type="text" class="form-control search" id="searchTerm" [(ngModel)]="filterData"
+                                placeholder="Search" (ngModelChange)=" onInputChanges()"/>
+                            <div class="icon">
+                                <i class="bi bi-search"></i>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" >
+                    <table class="table table-hover">
+                        <thead class="align-middle">
+                            <tr>
+                                <th  style="width: 70px;">Rule No 
+                                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('ruleno')"></i> </th>
+                                <th style="width: 100px;">Data Element 
+                                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dataelement')"></i> 
+                                </th>
+                                <th style="width: 70px;">Category 
+                                        <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('categorycode__name')"></i> </th>
+                                <th style="width: 70px;">Priority 
+                                        <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('prioritycode__name')"></i> </th>
+                                <th style="width: 70px;">Domain 
+                                        <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dqdomaincode__name')"></i> </th>
+                                <th>Threshold/Resolution 
+                                    <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dqthresholdpercentage')"></i> 
+                                </th>
+                                <th  style="width: 70px;">Status 
+                                        <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('statuscode__name')"></i> </th>
+                                <th style="width: 70px;">Profiling 
+                                        <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('overallvalidationflag')"></i> </th>
+                                <th style="width: 120px;">Connection Status 
+                                        <i   class="bi bi-sort-alpha-up" [class.bi-sort-alpha-up]="!visible"  [class.bi-sort-alpha-up-alt]="visible" (click)="sortTable('dbconnectioncode__validationflag')"></i> </th>
+                                <!-- <th>Datasource <i class="bi bi-sort-alpha-up" (click)="sortTable('datasourcecode.name')"></i></th> -->
+                                <th>Manage </th>
+                            </tr>
+                        </thead>
+                        <tbody class="align-middle" *ngFor="let dqrule of dqrules | filter:editparam ; let i = index"
+                            [class.odd]="i % 2 == 0" [class.even]="i % 2 != 0">
+                            <!-- Add your table rows dynamically from your Angular component -->
+                            <tr
+                                *ngIf="dqrule.ruleno || dqrule.dataelement || dqrule.dqbusinesscriteria || dqrule.dqthresholdpercentage || dqrule.dqdomaincode.name || dqrule.dbconnectioncode.validationflag "
+                                [ngClass]= "{'table-success': dqrule.code === editedTechnicalId }">
+                                <td>{{dqrule.ruleno}}</td>
+                                <td>{{dqrule.dataelement}}</td>
+                                <td>{{dqrule?.categorycode?.name}}</td>
+                                <td>{{dqrule?.prioritycode?.name}}</td>
+                                <td>{{dqrule?.dqdomaincode?.name}}</td>
+                                <td><span *ngIf="dqrule.dqthresholdpercentage != null">{{ dqrule.dqthresholdpercentage }}</span>
+                                <span *ngIf="dqrule.dqthresholdpercentage == null && dqrule.targetresolutiondate != null">{{ dqrule.targetresolutiondate | date:'MM/dd/yyyy' }}</span></td>
+                                <td>{{dqrule?.statuscode?.name}}</td>
+                                <td style="text-align: center;">{{dqrule?.overallvalidationflag? 'Yes' : 'No'}}</td>
+                                <!-- <td>{{dqrule?.dbconnectioncode?.validationflag? 'Valid' : 'Invalid' }}</td> -->
+                                <td style="text-align: center;"
+                                    [ngClass]="{'text-success ': dqrule?.dbconnectioncode?.validationflag, 'text-danger': !dqrule?.dbconnectioncode?.validationflag}">
+                                    {{dqrule?.dbconnectioncode?.validationflag ? 'Valid': 'Invalid '}}
+                                </td>
+                                <!-- <td>{{dqrule?.datasourcecode?.name}}</td> -->
+                                <td style="text-align: center;">
+                                    <button class="btn btn-primary" (click)="editDqRule(dqrule)">
+                                        <span class="bi bi-pencil-square"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- PAGINATION  -->
+                <!--<nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                      <li class="page-item">
+                        <a class="page-link" (click)="loadPage('previous')" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item"><a class="page-link" (click)="loadPage(1)">1</a></li>
+                      <li class="page-item"><a class="page-link" (click)="loadPage(2)">2</a></li>
+                      <li class="page-item"><a class="page-link" (click)="loadPage(3)">3</a></li>
+                      <li class="page-item">
+                        <a class="page-link" (click)="loadPage('next')" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>-->
+                  <!--<nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                      <li class="page-item">
+                        <a class="page-link" (click)="loadPage('previous')" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item" *ngFor="let pageNumber of getPageNumbers()" [ngClass]="{ 'active': pageNumber === currentpage }">
+                        <a class="page-link" (click)="loadPage(pageNumber)">{{ pageNumber }}</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" (click)="loadPage('next')" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>-->
+                  <app-pagination
+                  [totalPages]="totalPages"
+                  [currentPage]="currentpage"
+                  (pageChange)="onPageChange($event)">
+                </app-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showForm" class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+    <form [formGroup]="formDqRule">
+        <h1 class="head">Technical Rules Management</h1>
+        <div class="card">
+            <div class="card-body">
+                <div class="row form-group">
+                    <div class="col-2">
+                        <label for="input1" class="form-label">Rule No</label>
+                        <input class="form-control" type="text" placeholder="Rule No" formControlName="ruleno">
+                        <input class="form-control" type="hidden" placeholder="DB Connection Code"
+                            formControlName="dbconnectioncode">
+                    </div>
+                    <div class="col-3">
+                        <label for="input2" class="form-label">Data Element</label>
+                        <input class="form-control " type="text" placeholder="Data Element"
+                            formControlName="dataelement">
+                    </div>
+                    <div class="col-3">
+                        <label for="input3" class="form-label">Data Steward Name</label>
+                        <select class="form-select" id="datastewardname" formControlName="datastewardname"
+                  [ngClass]="{
+                  'is-invalid': formDqRule.get('datastewardname')?.invalid && (formDqRule.get('datastewardname')?.touched),
+                }">
+                  <option *ngFor="let role of roles" [value]="role.UserName">{{role.UserName}}</option>
+                  <i class="bi bi-caret-down"></i>
+                </select>
+                        <div *ngIf="formDqRule.get('datastewardname')?.invalid && formDqRule.get('datastewardname')?.touched" class="text-danger">
+                            Please Enter Data Steward Name.
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="datasourcecodelabel" class="form-label">Data Source</label>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <select class="form-select" id="datasourcecode" placeholder="Select a Data Source"
+                                    formControlName="datasourcecode" (change)="onDatasourceChange($event)" [ngClass]="{
+                                      'is-invalid': formDqRule.get('datasourcecode')?.invalid && (formDqRule.get('datasourcecode')?.touched),
+                                    }">
+                                    <option *ngFor="let datasource of datasources" [value]="datasource?.code">
+                                        {{datasource?.name}}</option>
+                                    <i class="bi bi-caret-down"></i>
+                                </select>
+                                </div>
+                                <div *ngIf="formDqRule.get('datasourcecode')?.invalid && (formDqRule.get('datasourcecode')?.touched)" class="text-danger">
+                                    Please Select the Data Source.
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row dropdowns form-group">
+                
+                    <div class="profile-container col-2">
+                        <label for="input3" class="form-label">Profile Type</label>
+                        <div class="solid-border">
+                    
+                            <div class=" radiobutt">
+                                <div class="row">
+                                    <div class="col">
+                                <div class="form-check r">
+                                    <input class="form-check-input" type="radio" formControlName="profiletypecode" id="profiletypeCustom"  value="1" [checked]="formDqRule.get('profiletypecode')?.value === '1'">
+                                    <p>Custom</p>
+                                </div></div>
+                                <div class="col">
+                                <div class="form-check r">
+                                    <input class="form-check-input" type="radio" formControlName="profiletypecode" id="profiletypeStandard" value="2" [checked]="formDqRule.get('profiletypecode')?.value === '2'">
+                                    <p>Standard</p>
+                                </div></div>
+                               <!-- <div *ngFor="let profileType of profiletypes" class="col">
+                                    <div class="form-check r">
+                                        <input class="form-check-input" type="radio" formControlName="profiletypecode" [id]="'profiletype' + profileType.code" [value]="profileType.code">
+                                        <label [for]="'profiletype' + profileType.code">{{ profileType.name }}</label>
+                                    </div>
+                                </div>-->
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-container col-10">
+                        <label for="input3" class="form-label">Standard Profiling</label>
+    
+                            <div class="solid-border">
+                               <div class="row">
+                    <div class="col-4">
+                        <label for="" class="form-label">Table</label>
+                        <select class="form-select" aria-label="Select a TableName" id="Sptablename" formControlName="sptablename" 
+                        (change)="onTableSelectChange($event)" >
+                       <option value="" disabled selected>Select a TableName</option>
+                        <option *ngFor ="let table of tables " [value]="table.TableName">{{table.TableName}}</option>
+                            
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label for="" class="form-label">Column Name</label>
+                        <select class="form-select" aria-label="Default select example" id="Spcolumnname" formControlName="spcolumnname"   
+                        (change)="onColumnSelectChange($event)" >
+                            <option value="" disabled selected>Select a ColumnName</option>
+                            <option *ngFor ="let column of columns " [value]="column.ColumnName">{{column.ColumnName}}</option>
+                            
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label for="" class="form-label">Profile Domain</label>
+                        <select class="form-select" aria-label="Default select example" id="Spdomainname" formControlName="spdomainname" 
+                        (change)="onDomainChange($event)" >
+                            <option value="" disabled selected>Select a domain</option>
+                            <option *ngFor ="let domain of domains " [disabled]="!isValidDomain(domain)" [value]="domain.name">{{domain.name}}</option>
+        
+                        </select>
+                    </div>
+               
+                </div>
+                </div>
+                </div>
+                </div>
+                
+
+
+
+
+                <!-- accordion -->
+                <div class="accordion" id="accordionExample">
+                    <!-- 1 -->
+                    <div class="accordion-item">
+                        <h4 class="accordion-header">
+                            <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> Rule
+                                Details<div class="acctop"> <input class="form-control" type="text"
+                                        formControlName="readyforprofilinginfo"
+                                        [ngClass]="{'success': formDqRule.get('readyforprofilinginfo')?.value === 'Ready for Profiling',
+                                                     'failed': formDqRule.get('readyforprofilinginfo')?.value === 'Not Ready for Profiling'}"></div>
+                            </button>
+                        </h4>
+                        <div id="collapseOne" class="accordion-collapse collapse show"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row form-group">
+                                    <div class="col-2">
+                                        <label for="input1" class="form-label">Data Quality Domain </label>
+                                        <input class="form-control " type="text" placeholder=""
+                                            formControlName="dqdomainname">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="input1" class="form-label">Priority</label>
+                                        <input class="form-control " type="text" placeholder=""
+                                            formControlName="priority">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="input1" class="form-label">Data Quality Category</label>
+                                        <input class="form-control " type="text" placeholder=""
+                                            formControlName="category">
+
+                                    </div>
+                                    <div class="col-2" [hidden]="!showThresholdField">
+                                        <label for="input3" class="form-label">Target Threshold </label>
+                                        <input class="form-control  " type="text" placeholder="% (Out of 100%)"
+                                            formControlName="dqthresholdpercentage">
+                                    </div>
+                                    <div class="col-2" [hidden]="!showResolutionDateField">
+                                        <label for="input3" class="form-label">Target Resolution Date</label>
+                                        <input class="form-control  " type="text" placeholder="" formControlName="targetresolutiondate">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="input1" class="form-label">Status</label>
+                                        <input class="form-control " type="text" placeholder=""
+                                            formControlName="status">
+                                    </div>
+
+                                    <div class="col-2">
+                                        <label for="input3" class="form-label"> Ready For Profiling? </label>
+                                        <!-- {{ formDqRule.get('overallvalidationflag') ? 'Yes' : 'No' }} -->
+                                        <input class="form-control  " type="text" placeholder=""
+                                            formControlName="overallvalidationflag">
+                                    </div>
+                                    <br />
+                                    <div class="col-sm-6 ">
+                                        <label for="input" class="form-label">Rule Definition</label>
+                                        <!-- <textarea formControlName="ruledefinition"
+                                            class="form-control textarea-l "></textarea> -->
+                                            <div class="NgxEditor__Wrapper textarea-l textarea">
+                                                <ngx-editor [editor]="editor_ruledefinition" formControlName="ruledefinition" > </ngx-editor>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="input" class="form-label">Business Criteria </label>
+                                        <!-- <textarea formControlName="dqbusinesscriteria"
+                                            class="form-control textarea-l "></textarea> -->
+                                            <div class="NgxEditor__Wrapper textarea-l textarea">
+                                                <ngx-editor [editor]="editor_dqbusinesscriteria" formControlName="dqbusinesscriteria" > </ngx-editor>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <!-- <button type="button" class="btn btn-secondary waves-effect" (click)="validateDBConnection()">Validate Connection</button> -->
+                            <button type="button" class="accordion-button collapsed " data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> Valid
+                                Expression
+                                <div class="acctop"> 
+                                    <!-- <input class="form-control" type="text"
+                                        formControlName="validexpressionvalidateinfo"> -->
+                                        <input class=" form-control" type="text" 
+                                        formControlName="validexpressionvalidateinfo"
+                                        [ngClass]="{'success': formDqRule.get('validexpressionvalidateinfo')?.value === 'Expression Validated',
+                                                     'failed': formDqRule.get('validexpressionvalidateinfo')?.value === 'Expression Not Validated'}">
+                                    </div>
+                                <!-- <div>Not Validated</div> -->
+                                <!-- <label formControlName="DQSQLExpressionValidDataValidate"></label> -->
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-sm-6 form-group">
+                                        <div class="d-flex justify-content-end ">
+                                            <div class="col-sm-4">
+                                                <!-- <input class="form-control form-control-sm " type="text"
+                                                    formControlName="dqsqlexpressionvaliddatavalidate"> -->
+                                                    <input class="form-control form-control-sm" type="text" formControlName="dqsqlexpressionvaliddatavalidate"
+                                                        [ngClass]="{'success': formDqRule.get('dqsqlexpressionvaliddatavalidate')?.value === 'Success',
+                                                                     'failed': formDqRule.get('dqsqlexpressionvaliddatavalidate')?.value === 'Failed'}">
+                                                <!-- <input class="form-control form-control-sm " type="text" placeholder="Error Mesage" disabled> DQSQLExpressionValidDataResult-->
+                                            </div>
+                                        </div>
+                                        <label for="input" class="form-label">Valid Data Query / Expression </label>
+                                        <!-- formControlName="validexpression"  -->
+                                        <textarea type="text" class="form-control textarea-l textarea"
+                                            formControlName="dqsqlexpressionvaliddata"></textarea>
+                                    </div>
+
+                                    <div class="col-sm-6 form-group">
+                                        <label for="input" class="form-label">Expression Validity / Error Message
+                                        </label>
+                                        <!-- formControlName="validexpressionerrormessage"  -->
+                                        <textarea type="text" class="form-control textarea-m"
+                                            formControlName="dqsqlexpressionvaliderrormsg"></textarea>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-success mr-1"
+                                                (click)="validateValidExpression()">Validate
+                                                Expression</button>
+                                        </div>
+                                        <!-- formControlName="validexpressionvalidatebtn" -->
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-light mr-1"  [disabled]="isInvalid" (click)="openModal(formDqRule.get('dqsqlexpressionvaliddata')?.value)">Preview Data(Top 10
+                                                Rows)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Invalid Expression
+                                <div class="acctop"><input class="form-control" type="text"
+                                        formControlName="invalidexpressionvalidateinfo"
+                                        [ngClass]="{'success': formDqRule.get('invalidexpressionvalidateinfo')?.value === 'Expression Validated',
+                                                     'failed': formDqRule.get('invalidexpressionvalidateinfo')?.value === 'Expression Not Validated'}"></div>
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row form-group">
+                                    <div class="col-sm-6 ">
+                                        <div class="d-flex justify-content-end ">
+                                            <div class="col-sm-4">
+                                                <input class="form-control form-control-sm " type="text"
+                                                    formControlName="dqsqlexpressioninvaliddatavalidate"
+                                                    [ngClass]="{'success': formDqRule.get('dqsqlexpressioninvaliddatavalidate')?.value === 'Success',
+                                                                 'failed': formDqRule.get('dqsqlexpressioninvaliddatavalidate')?.value === 'Failed'}">
+                                                <!-- <input class="form-control form-control-sm" type="text" placeholder="Error Mesage" disabled> DQSQLExpressionInvalidDataResult-->
+                                            </div>
+                                        </div>
+                                        <label for="input" class="form-label">Invalid Data Query / Expression </label>
+                                        <textarea  class="form-control textarea-l textarea" formControlName="dqsqlexpressioninvaliddata"></textarea>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label for="input" class="form-label">Expression Validity / Error Message
+                                        </label>
+                                        <textarea  class="form-control textarea-m" formControlName="dqsqlexpressioninvaliderrormsg"></textarea>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-success mr-1"
+                                                (click)="validateInvalidExpression()">Validate
+                                                Expression</button>
+                                        </div>
+                                        <!-- formControlName="invalidexpressionvalidatebtn" -->
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-light mr-1" [disabled]="isInvalid1" (click)="openModal(formDqRule.get('dqsqlexpressioninvaliddata')?.value)">Preview Data(Top 10
+                                                Rows)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Total Expression  
+                                <div class="acctop"><input class="form-control" type="text"
+                                        formControlName="totalexpressionvalidateinfo"
+                                        [ngClass]="{'success': formDqRule.get('totalexpressionvalidateinfo')?.value === 'Expression Validated',
+                                                     'failed': formDqRule.get('totalexpressionvalidateinfo')?.value === 'Expression Not Validated'}"></div>
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <div class="d-flex justify-content-end ">
+                                            <div class="col-sm-4">
+                                                <input class="form-control form-control-sm " type="text"
+                                                    formControlName="dqsqlexpressiontotaldatavalidate"
+                                                    [ngClass]="{'success': formDqRule.get('dqsqlexpressiontotaldatavalidate')?.value === 'Success',
+                                                                 'failed': formDqRule.get('dqsqlexpressiontotaldatavalidate')?.value === 'Failed'}">
+                                                <!-- <input type="text"  formControlName="dqsqlexpressiontotaldatavalidate"
+                                                                    [ngClass]="{ 'form-control': true, 'form-control-sm': true,'expression-validated': isTotalValidated === 'Expression Validated','expression-not-validated': isTotalValidated === 'Expression Not Validated'}"> -->
+                                                <!-- <input class="form-control form-control-sm"  type="text" formControlName="dqsqlexpressiontotaldatavalidate"
+                                                            [ngClass]="{'expression-validated': isTotalValidated === 'Expression Validated', 'expression-not-validated': isTotalValidated === 'Expression Not Validated'}">-->
+                                                <!-- <input class="form-control form-control-sm " type="text" placeholder="Error Mesage" disabled> dqsqlexpressiontotaldataresult-->
+                                            </div>
+                                        </div>
+
+                                        <label for="input" class="form-label">Total Data Query / Expression </label>
+                                        <textarea  class="form-control textarea-l textarea"
+                                            formControlName="dqsqlexpressiontotaldata"></textarea>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label for="input" class="form-label">Expression Validity / Error Message
+                                        </label>
+                                        <textarea  class="form-control textarea-m "  formControlName="dqsqlexpressiontotalerrormsg"></textarea>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-success mr-1"
+                                                (click)="validateTotalDataExpression()">Validate
+                                                Expression</button>
+                                        </div>
+                                        <!-- formControlName="totalexpressionvalidatebtn" -->
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-light mr-1" [disabled]="isInvalid2" (click)="openModal(formDqRule.get('dqsqlexpressiontotaldata')?.value)">Preview Data(Top 10
+                                                Rows)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lbut">
+                    <div class="FisrtFormBut">
+                        <button type="button" class="btn btn-s" [disabled]="!canEdit" (click)=" updateReadyForProfiling()">Save</button>
+                    </div>
+                    <div class="FisrtFormBut">
+                        <button type="button" class="btn btn-s" (click)="clear()">Clear</button>
+                    </div>
+                    <div class="FisrtFormBut">
+                        <button type="button" class="btn btn-d" (click)="toggleFormVisibility()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-toast [style]="{width:'300px'}"></ng-toast>
+    </form>
+
+    <!-- modal for  prewiview datataKC -->
+    <div class="modal fade" id="staticBackdropValid" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Preview Data</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="container">
+
+                    <div class="table-containers">
+                        <div class="table  table-responsive ">
+
+                            <table class="table   table-hover" id="previewTable">
+                                <thead class="align-middle">
+                                    <tr id="tableHeaderRow">
+                                    
+
+                                    </tr>
+                                </thead>
+                                <tbody class="align-middle" id="tableBody">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closePreview()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

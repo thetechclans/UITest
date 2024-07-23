@@ -1,0 +1,27 @@
+
+<div class="row">
+  <!-- Sidebar -->
+  <div class="col-md-3 col-lg-2 d-md-block sidebar active">
+    <ul class="nav flex-column">
+      <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><i class="bi bi-house-dash iconnav"></i><a class="nav-link" routerLink="Dashboard">Dashboard</a></li>
+      <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><i class="bi bi-database iconnav"></i><a class="nav-link" routerLink="Datasource">Data Sources</a></li>
+      <li routerLinkActive="active"><i class="bi bi-briefcase iconnav"></i><a class="nav-link" routerLink="BussinessRules">Business Rules</a></li>
+      <li routerLinkActive="active"><i class="bi bi-clipboard-data iconnav"></i><a class="nav-link" routerLink="TechnicalRules">Technical Rules</a></li>
+      <li routerLinkActive="active"><i class="bi bi-card-checklist iconnav"></i><a class="nav-link" routerLink="DataQualityCard">Data Quality Cards</a></li>
+      <li [ngClass]="{ 'active': isActive(['DQProfiling', 'DQScheduling', 'DQCreateProfiling', 'DQProfilingRule']) }">
+        <i class="bi bi-search"></i>
+        <a class="nav-link iconnav" routerLink="DQProfiling">Data Profiling</a>
+      </li>
+      
+      <li routerLinkActive="active"><i class="bi bi-gear iconnav"></i><a class="nav-link" routerLink="Settings">Settings / Options</a></li>
+      <li routerLinkActive="active"><i class="bi bi-file-earmark-bar-graph iconnav"></i><a class="nav-link" routerLink="ReferenceData">Reference Data</a></li>
+      <li *ngIf="showRegister" routerLinkActive="active"><i class="bi bi-person-vcard-fill iconnav"></i><a class="nav-link" routerLink="Usermanagement">User Management</a></li>
+      <li routerLinkActive="active"><i class="bi bi-graph-up-arrow iconnav"></i><a class="nav-link" routerLink="Report">Reports</a></li>
+      <!--<li *ngIf="showRegister"><i class="bi bi-person iconnav"></i><a class="nav-link" href="Register">Register</a></li>-->
+     
+    </ul>
+  </div>
+</div>
+
+
+

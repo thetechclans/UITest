@@ -1,0 +1,82 @@
+component.ts
+
+// initialize in above class 
+
+filterData: string = '';
+private onDestroy$ = new Subject<void>();
+private searchSubject = new Subject<void>();
+
+// add this within the ngOninit
+
+ this.searchSubject.pipe(
+      debounceTime(3000),
+      takeUntil(this.onDestroy$)
+    ).subscribe(() => {
+      this.getDataSourceDetails(this.currentpage);
+    });
+
+//add this within the class 
+
+ onInputChanges() {
+    this.searchSubject.next();
+  } 
+
+// pass the arguement in the function
+
+getDqruleDetail(page: number ){
+  let ordering = this.currentSortField ? `${this.currentSortOrder}${this.currentSortField}` : null;
+  this.spinner.show();
+  this.srvdqrule. getDQRuleDetailCurrent(page,ordering,this.filterData).subscribe(data=>{       ==>filterData
+   this.spinner.hide();
+   console.log('i want',data)
+   //this.dqrulesdetail = data;
+      // Check if there are records
+      if (data && data.length > 0) {
+        this.dqrulesdetail = data;
+        } else {
+         this.dqrulesdetail = Array(10).fill({
+          code: '',
+          ruleno: '',
+          dataelement: '',
+          categorycode: '',
+          prioritycode: '',
+          dqdomaincode: '',
+          dqthresholdpercentage: null,
+          statuscode: '',
+          overallvalidationflag: ''
+        });
+      }
+      },error => {
+        this.spinner.hide();
+    }); 
+ }
+
+ HTML:
+
+ // add this line above table
+
+  <input type="text" class="form-control search" id="searchTerm" placeholder="Search"
+                [(ngModel)]="filterData" (ngModelChange)=" onInputChanges()" />
+
+services:
+
+// pass the search string as arguement here
+
+getDataSourceDetail(page: number | null = null,searchTerm: string = ''): Observable<datasourceDetailMdlInf[]>{
+    let url = `${this.apiService}${this.endpointDetailPG}`;
+    const params = new URLSearchParams();
+    if (searchTerm) {
+      params.append('search', searchTerm.toString());
+    } else if (page !== null) {
+      params.append('page', page.toString());
+    }
+
+    if (params.toString()) {
+      url += `?${params.toString()}`;
+    }
+    return this.http
+    .get(url)
+    .pipe(
+      map((data: any) => data.results),
+    )
+  }

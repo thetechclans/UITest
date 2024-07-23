@@ -1,0 +1,259 @@
+.main {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+ 
+ 
+   margin-top: 65px;
+   .form-group input {
+     //border-radius: 10px;
+     margin-bottom: 20px;
+     margin-top: 6px;
+    
+   
+   }
+ }
+ label {
+  display: block;
+  //margin-bottom: ;
+  font-weight: bold;
+
+
+}
+.headingLabel{
+  font-size: 25px;
+ }
+ .form-check-input {
+  border: 2px solid cadetblue; /* Adjust the border width as needed */
+}
+
+.inputContent{
+  margin-top: 10px;
+}
+.head{
+  font-style: bold ;
+  font-size: 30px;
+  color: rgb(56, 78, 83);
+}
+.mainCard{
+  margin-top: 25px;
+}
+
+
+
+.check{
+margin-top: 10px;
+margin-bottom: 10px;
+}
+
+
+
+.m1{
+margin-bottom: 20px;
+}
+.m2{
+margin-top: 30px;
+}
+
+
+////////////////////////////////////////////////
+
+
+.input-container {
+position: relative;
+margin-top: 20px;
+border: solid 1px lightgray;
+border-radius: 12px;
+padding: 25px;
+font-size: 20px;
+
+
+}
+
+.txt{
+
+position: absolute;
+width: max-content;
+padding: 10px;
+top: -27px;
+left: 5;
+// border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 16px;
+background-color: #ffff;
+color:cadetblue;
+font-size: 22px;
+
+
+
+}
+
+.text-centers{
+color:cadetblue;
+font-size: x-large;
+margin-bottom: 10px ;
+}
+
+.row1 {
+margin-bottom: 15px;
+}
+
+.row2{
+margin-top: 15px;
+}
+
+.form1{
+margin-left: 25px;
+font-size: large;
+}
+.form2{
+margin-left: 10px;
+}
+
+.form-check{
+margin-right: 15px;
+margin-left: 25px;
+}
+
+.btn{
+font-size: large;
+background-color: cadetblue;
+color: white;
+border: none;
+}
+.btt{
+margin-top: 25px;
+}
+
+/////
+
+
+// /* Adjust the spacing between columns */
+// .col {
+//   padding: 0;
+// }
+
+// /* Style for the content */
+// .content {
+//   /* Add your styles */
+// }
+
+// /* Style for the image container */
+// .image-container {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   height: 100%; /* Adjust the height as needed */
+// }
+
+// /* Style for the image */
+// .image-container img {
+//   max-width: 100%; /* Ensure the image does not exceed the container width */
+//   height: auto;
+// }
+
+/* Style for the image container */
+.image-container {
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100%;
+}
+
+/* Style for the image */
+.image-container img {
+max-width: 100%;
+height: auto;
+}
+
+/* Style for the content */
+.content {
+padding: 20px;
+}
+
+.cont{
+margin-top: 25px;
+background-color: aliceblue;
+padding: 20px;
+}
+/* Responsive styles */
+@media (max-width: 767px) {
+.image-container, .col-md-6 {
+    width: 100%;
+}
+}
+.cc{
+padding: 20px;
+}
+.btn{
+  font-size: large;
+  background-color: cadetblue;
+  color: white;
+  border: none;
+  }
+
+  img{
+    max-width: 600px;
+  }
+///////////////////////////
+
+.containers {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 4px 4px 4px 8px  rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 80%;
+    max-width: 900px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    margin: 0 auto; /* Center the container horizontally */
+}
+.header {
+     background-color: #c0ccd8;
+    color: black;
+    padding: 20px;
+    font-size: 24px;
+    border-radius: 16px;
+}
+
+.section {
+    width: 45%;
+    margin: 10px;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.section h3 {
+    margin-top: 0;
+}
+.timeliness { background-color: #6c757d; color: white; }
+.accuracy { background-color: #05987d; color: white; }
+.validity { background-color: #128183; color: white; }
+.completeness { background-color: #2a6fbe; color: white; }
+.uniqueness { background-color: #c93f20; color: white; }
+.consistency { background-color: #0a5e7a; color: white; }  //#982a05
+
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .section {
+      width: 100%;
+      margin: 10px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+      font-size: 20px;
+      padding: 15px;
+  }
+  .section {
+      padding: 15px;
+  }
+}
+
+
+
+

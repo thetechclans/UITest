@@ -1,0 +1,111 @@
+<!-- 
+<nav class="nav">
+  
+    <a class="navbar-brand" href="#">
+      <img src="../../../assets/imgs/dqms.ico" alt="Bootstrap">DQMS
+    </a>
+     <img  class="img" src="/src/assets/imgs/dqms.jpg" alt="">--comments
+    <div class="heading">  <p class="tech">Techclans</p> </div>
+    <div class="profile-icon">
+      <i class="fas fa-user-circle"></i>
+    </div>
+  
+
+</nav> -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand d-flex align-items-center" >
+      <img src="../../../dqms/assets/imgs/dbicon.jpg" width="30" height="30" class="d-inline-block align-top" alt="DQMS Icon">
+      <span class="ml-2 dqBrand">DQMS</span>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <div class="navbar-text">
+         {{this.organisation}}
+      </div>
+  </div>
+  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <div class="icon d-flex align-items-center " >
+      <div class="navbar-icon-container" *ngIf="rolecode === '4'">
+        <i class="bi bi-bell mr-3" style="font-size: 1.5rem;" (click)="toggleNotificationPanel()"></i>
+        <span *ngIf="unreadcount > 0" class="badge">{{ unreadcount }}</span>
+      </div>
+      <i class="fas fa-user ml-3" (click)="openOffcanvas()"> {{ this.username }}</i>
+    </div>
+
+  </div>
+</nav>
+<div class="offcanvas offcanvas-end " tabindex="-1" #offcanvas id="offcanvasDarkNavbar">
+  <!--<div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">USER PROFILE</h5>
+      <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>-->
+  <div class="offcanvas-body">
+    <div class="d-flex justify-content-center lab">
+      <label for="" >User Profile</label>
+
+    </div>
+    <div class="buttonLink">
+      <a class="dropdown-item"><strong> Name: </strong> {{this.username }} </a>
+      <a class="dropdown-item"><strong>Role: </strong>{{this.rolename}}</a>
+      <div class="log">
+      <a class="dropdown-item abutten"  routerLink="/Layout/Change-oldpassword/"><i class="bi bi-person-fill-lock">Change Password</i></a>
+
+        <a class="dropdown-item abutten " href="" (click)="logout()"><i class="bi bi-box-arrow-left "> Logout</i></a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="offcanvas canva" [class.show]="notificationPanelOpen">
+  <div class="offcanvas-header d-flex justify-content-between align-items-center">
+    <div>
+    <h5><b>Notifications</b></h5></div>
+    <button type="button" class="close" aria-label="Close" (click)="toggleNotificationPanel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="offcanvas-body canvabody" style="background-color: whitesmoke;">
+    <ul class="list-group mt-4">
+     <li class="list-group-item border-bottom" *ngFor="let notify of unreadNotifications">
+        <div class="row align-items-center" >
+          <div class="col">
+           <span ><b>{{notify.dqprofilingresultscode?.profilecode?.dqrulecode?.ruleno}}</b></span>
+          </div>
+        </div>
+        <div class="row mt-2 align-items-center">
+          <div class="col-8 text-left">
+            <div *ngIf="!notify.showFullMessage">
+              <p class="truncate-text d-inline">
+                {{getDescription(notify) | slice:0:30 }}{{ getDescription(notify).length > 30 ? '...' : '' }}
+                <button class="btn btn-link btn-sm read-button" (click)="toggleFullMessage(notify)">
+                  Read
+                </button>
+              </p>
+            </div>
+            <div *ngIf="notify.showFullMessage">
+              <p>{{getDescription(notify)}}</p>
+            </div>
+          </div>
+          <div class="col-4 text-right">
+            <span [ngClass]="getStatusIconClass(notify.dqprofilingresultscode?.successflag)">
+              <span class="status-text">{{ getStatusText(notify.dqprofilingresultscode?.successflag) }}</span>
+            </span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+   <div class="mt-2 d-flex justify-content-start" style="margin-left: 20px;">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="viewAllCheckbox" [(ngModel)]="showAllNotifications" (change)="toggleViewAll()">
+        <label class="form-check-label" for="viewAllCheckbox">
+          <b>View all</b>
+        </label>
+      </div>
+    </div>
+</div>

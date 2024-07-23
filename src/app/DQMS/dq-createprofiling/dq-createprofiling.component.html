@@ -1,0 +1,648 @@
+<!-- data profiling  management-->
+<div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main">
+  <div class="d-flex justify-content-between">
+    <div class="topic">
+      <h1 class="label">Data Profiling Management</h1>
+      <p class="para">Create and manage data profiling schedules.</p>
+    </div>
+  </div>
+  <ngx-spinner>
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </ngx-spinner>
+  <div class="card">
+    <div class="card-body">
+      <!--table 1-->
+      <div class="containers">
+        <div class="table-containers">
+          <div class="table table-responsive">
+            <table class="table table-hover">
+              <thead class="align-middle">
+                <tr>
+                  <th>Rule No</th>
+                  <th>Data Element</th>
+                  <th>DQ Category</th>
+                  <th>Priority</th>
+                  <th>DQ Domain</th>
+                  <th>Target Threshold % or Resulution date</th>
+                  <th>Status</th>
+                  <th>Profiling?</th>
+                </tr>
+              </thead>
+              <tbody
+                class="align-middle"
+                *ngFor="
+                  let dqrule of dqrules | filter : editparam;
+                  let i = index
+                "
+                [class.odd]="i % 2 == 0"
+                [class.even]="i % 2 != 0"
+              >
+                <tr>
+                  <td>{{ dqrule.ruleno }}</td>
+                  <td>{{ dqrule.dataelement }}</td>
+                  <td>{{ dqrule?.categorycode?.name }}</td>
+                  <td>{{ dqrule?.prioritycode?.name }}</td>
+                  <td>{{ dqrule?.dqdomaincode?.name }}</td>
+                  <td>
+                    {{ dqrule.dqthresholdpercentage }}
+                    {{ dqrule.targetresolutiondate | date : "MM/dd/yyyy" }}
+                  </td>
+                  <td>{{ dqrule?.statuscode?.name }}</td>
+                  <td>{{ dqrule?.overallvalidationflag ? "Yes" : "No" }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <ng-toast [style]="{ width: '300px' }"></ng-toast>
+      </div>
+      <!-- table 2-->
+      <div class="table-containers">
+        <h1 class="label">Please pick schedule for this rule or create one</h1>
+        <div class="col">
+          <div class="d-flex justify-content-between align-items-center">
+            <button
+              class="btn btn-light AButt"
+              [disabled]="!canSave"
+              (click)="openModal()"
+            >
+              New Schedule<i class="bi bi-plus-square-fill"> </i>
+            </button>
+          </div>
+          <div class="searchbox">
+            <input
+              type="text"
+              class="form-control search"
+              id="searchTerm"
+              [(ngModel)]="filterData"
+              (ngModelChange)="onInputChanges()"
+              placeholder="Search"
+            />
+            <div class="icon">
+              <i class="bi bi-search"></i>
+            </div>
+          </div>
+        </div>
+        <div class="table table-responsive">
+          <table class="table table-hover">
+            <thead class="align-middle">
+              <tr>
+                <th>
+                  Name
+                  <i
+                    class="bi"
+                    [class.bi-sort-alpha-up]="sort_by !== 'name' || sort_order === 'asc'"
+                    [class.bi-sort-alpha-up-alt]="sort_by === 'name' && sort_order === 'desc'"
+                    (click)="sortTable('name')"
+                  ></i>
+                </th>
+                <th>
+                  Frequency
+                  <i
+                    class="bi"
+                    [class.bi-sort-alpha-up]="sort_by !== 'frequencyname' || sort_order === 'asc'"
+                    [class.bi-sort-alpha-up-alt]="sort_by === 'frequencyname' && sort_order === 'desc'"
+                    (click)="sortTable('frequencyname')"
+                  ></i>
+                </th>
+                <th>
+                  Date/day
+                  <i
+                    class="bi"
+                    [class.bi-sort-alpha-up]="sort_by !== 'datenumber' || sort_order === 'asc'"
+                    [class.bi-sort-alpha-up-alt]="sort_by === 'datenumber' && sort_order === 'desc'"
+                    (click)="sortTable('datenumber')"
+                  ></i>
+                </th>
+                <th>
+                  Job Time
+                  <i
+                    class="bi"
+                    [class.bi-sort-alpha-up]="sort_by !== 'starttime' || sort_order === 'asc'"
+                    [class.bi-sort-alpha-up-alt]="sort_by === 'starttime' && sort_order === 'desc'"
+                    (click)="sortTable('starttime')"
+                  ></i>
+                </th>
+                <th>
+                  Start Date
+                  <i
+                    class="bi"
+                    [class.bi-sort-alpha-up]="sort_by !== 'startdate' || sort_order === 'asc'"
+                    [class.bi-sort-alpha-up-alt]="sort_by === 'startdate' && sort_order === 'desc'"
+                    (click)="sortTable('startdate')"
+                  ></i>
+                </th>
+                <th>
+                  End Date
+                  <i
+                    class="bi"
+                    [class.bi-sort-alpha-up]="sort_by !== 'enddate' || sort_order === 'asc'"
+                    [class.bi-sort-alpha-up-alt]="sort_by === 'enddate' && sort_order === 'desc'"
+                    (click)="sortTable('enddate')"
+                  ></i>
+                </th>
+                <th>
+                  Jobs Count
+                  <i
+                    class="bi"
+                    [class.bi-sort-alpha-up]="sort_by !== 'jobscount' || sort_order === 'asc'"
+                    [class.bi-sort-alpha-up-alt]="sort_by === 'jobscount' && sort_order === 'desc'"
+                    (click)="sortTable('jobscount')"
+                  ></i>
+                </th>
+                <th>Select</th>
+                <th>Manage</th>
+              </tr>
+          
+            </thead>
+            <tbody
+              class="align-middle"
+              *ngFor="
+                let schedule of schedules | filter : editparam;
+                let i = index
+              "
+              [class.odd]="i % 2 == 0"
+              [class.even]="i % 2 != 0"
+            >
+              <tr
+                [ngClass]="{
+                  'table-success': schedule.code === editedScheduleId
+                }"
+              >
+                <td>{{ schedule.name }}</td>
+                <td>{{ schedule.frequencyname}}</td>
+                <td>
+                  <ng-container *ngIf="schedule.daynumber">
+                    {{ schedule.daynumber }}
+                  </ng-container>
+                  <ng-container *ngIf="schedule.datenumber">
+                    {{ schedule.datenumber }}
+                  </ng-container>
+                </td>
+                <td>{{ schedule.starttime }}</td>
+                <td>{{ schedule.startdate }}</td>
+                <td>{{ schedule.enddate }}</td>
+                <td>
+                  {{ schedule.jobscount || 0 }}
+                </td>
+
+                <td>
+                  <div class="form-check d-flex justify-content-center">
+                    <!--<input
+                      class="form-check-input"
+                      type="checkbox"
+                      [checked]="isSelectedSchedule(schedule.code)"
+                      (change)="handleCheckboxSelection(schedule.code)"
+                    />-->
+                     <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [checked]="schedule.isScheduleSelected"
+                      (change)="handleCheckboxSelection(schedule.code, $event)"
+                    />
+                    <label class="form-check-label" for="flexCheckDefault">
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <ng-container *ngIf="schedule.jobscount === null || schedule.jobscount === 0">
+                    <!-- If jobscount is null, show the Edit button -->
+                    <i
+                      class="bi bi-pencil-square"
+                      (click)="editSchedule(schedule)"
+                      [ngClass]="{ disabled: !canEdit }"
+                      ngbTooltip="Edit"
+                    ></i>
+                  </ng-container>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <app-pagination
+          [totalPages]="totalPages"
+          [currentPage]="currentpage"
+          (pageChange)="onPageChange($event)"
+        >
+        </app-pagination>
+      </div>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="scheduleModal"
+        #scheduleModal
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        [class.show]="showModal"
+      >
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                New Job Schedule
+              </h1>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="form">
+                <div class="row">
+                  <div class="col">
+                    <label for="">Job Name</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder=""
+                        formControlName="name"
+                        [ngClass]="{
+                          'is-invalid':
+                            form.get('name')?.invalid &&
+                            form.get('name')?.touched
+                        }"
+                      />
+                    </div>
+                    <div
+                      *ngIf="
+                        form.get('name')?.invalid && form.get('name')?.touched
+                      "
+                      class="text-danger"
+                    >
+                      Please Enter the Job Name.
+                    </div>
+                  </div>
+                  <div class="col">
+                    <label for="">Frequency </label>
+                    <select
+                      class="form-select"
+                      [(ngModel)]="selectedFrequency"
+                      (change)="onFrequencyChange()"
+                      formControlName="frequencycode"
+                      [ngClass]="{
+                        'is-invalid':
+                          form.get('frequencycode')?.invalid &&
+                          form.get('frequencycode')?.touched
+                      }"
+                    >
+                      <option
+                        *ngFor="let frequency of frequencies"
+                        [value]="frequency.code"
+                      >
+                        {{ frequency.name }}
+                      </option>
+                    </select>
+                    <div
+                      *ngIf="
+                        form.get('frequencycode')?.invalid &&
+                        form.get('frequencycode')?.touched
+                      "
+                      class="text-danger"
+                    >
+                      Please Select the Frequency.
+                    </div>
+                  </div>
+                  <div *ngIf="showWeekly" class="weeks">
+                    <div class="col">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="monday"
+                          formControlName="daynumber"
+                          [value]="1"
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('daynumber')?.invalid &&
+                              form.get('daynumber')?.touched
+                          }"
+                        />
+                        <label class="form-check-label" for="monday"
+                          >Monday</label
+                        >
+                      </div>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="tuesday"
+                          formControlName="daynumber"
+                          [value]="2"
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('daynumber')?.invalid &&
+                              form.get('daynumber')?.touched
+                          }"
+                        />
+                        <label class="form-check-label" for="tuesday"
+                          >Tuesday</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="wednesday"
+                          formControlName="daynumber"
+                          [value]="3"
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('daynumber')?.invalid &&
+                              form.get('daynumber')?.touched
+                          }"
+                        />
+                        <label class="form-check-label" for="wednesday"
+                          >Wednesday</label
+                        >
+                      </div>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="thursday"
+                          formControlName="daynumber"
+                          [value]="4"
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('daynumber')?.invalid &&
+                              form.get('daynumber')?.touched
+                          }"
+                        />
+                        <label class="form-check-label" for="thursday"
+                          >Thursday</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="friday"
+                          formControlName="daynumber"
+                          [value]="5"
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('daynumber')?.invalid &&
+                              form.get('daynumber')?.touched
+                          }"
+                        />
+                        <label class="form-check-label" for="friday"
+                          >Friday</label
+                        >
+                      </div>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="saturday"
+                          formControlName="daynumber"
+                          [value]="6"
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('daynumber')?.invalid &&
+                              form.get('daynumber')?.touched
+                          }"
+                        />
+                        <label class="form-check-label" for="saturday"
+                          >Saturday</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="sunday"
+                          formControlName="daynumber"
+                          [value]="7"
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('daynumber')?.invalid &&
+                              form.get('daynumber')?.touched
+                          }"
+                        />
+                        <label class="form-check-label" for="sunday"
+                          >Sunday</label
+                        >
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="
+                        form.get('daynumber')?.invalid &&
+                        form.get('daynumber')?.touched
+                      "
+                      class="text-danger"
+                    >
+                      Please Select the Day.
+                    </div>
+                  </div>
+
+                  <div *ngIf="showMonthly" class="row">
+                    <div class="col-4">
+                      <label for="">Date Number</label>
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder=""
+                          formControlName="datenumber"
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('datenumber')?.invalid &&
+                              form.get('datenumber')?.touched
+                          }"
+                        />
+                      </div>
+                      <div
+                        *ngIf="
+                          form.get('datenumber')?.invalid &&
+                          form.get('datenumber')?.touched
+                        "
+                        class="text-danger"
+                      >
+                        Please Enter the Date number.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <!--  -->
+                    <label for="">Start Date </label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="date"
+                        class="form-control"
+                        placeholder=""
+                        formControlName="startdate"
+                        [ngClass]="{
+                          'is-invalid':
+                            form.get('startdate')?.invalid &&
+                            form.get('startdate')?.touched
+                        }"
+                      />
+                    </div>
+                    <div
+                      *ngIf="
+                        form.get('startdate')?.invalid &&
+                        form.get('startdate')?.touched
+                      "
+                      class="text-danger"
+                    >
+                      Please Enter the Date.
+                    </div>
+                    <label for="">Start Time</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="time"
+                        class="form-control"
+                        placeholder=""
+                        formControlName="starttime"
+                        [ngClass]="{
+                          'is-invalid':
+                            form.get('starttime')?.invalid &&
+                            form.get('starttime')?.touched
+                        }"
+                      />
+                    </div>
+                    <div
+                      *ngIf="
+                        form.get('starttime')?.invalid &&
+                        form.get('starttime')?.touched
+                      "
+                      class="text-danger"
+                    >
+                      Please Enter the Date.
+                    </div>
+                  </div>
+                  <div class="col">
+                    <label for="">End Date</label>
+                    <div class="d-flex justify-content-between">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="enddate"
+                          formControlName="endDateSelected"
+                          name="enddate"
+                          [value]="true"
+                          (change)="onEndDateChange()"
+                          [checked]="
+                            form.get('endDateSelected')?.value === true
+                          "
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('endDateSelected')?.invalid &&
+                              form.get('endDateSelected')?.touched
+                          }"
+                        />
+                        <label class="form-check-label" for="enddate"
+                          >End Date</label
+                        >
+                      </div>
+
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          id="noenddate"
+                          formControlName="endDateSelected"
+                          name="noenddate"
+                          [value]="false"
+                          (change)="onEndDateChange()"
+                          [checked]="
+                            form.get('endDateSelected')?.value === false
+                          "
+                          [ngClass]="{
+                            'is-invalid':
+                              form.get('endDateSelected')?.invalid &&
+                              form.get('endDateSelected')?.touched
+                          }"
+                        />
+                        <label class="form-check-label" for="noenddate"
+                          >No End Date</label
+                        >
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="
+                        form.get('endDateSelected')?.invalid &&
+                        form.get('endDateSelected')?.touched
+                      "
+                      class="text-danger"
+                    >
+                      Please Select the EndDate or Noenddate .
+                    </div>
+                    <label for="">End Date</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="Date"
+                        class="form-control"
+                        placeholder=""
+                        formControlName="enddate"
+                        [disabled]="
+                          form.get('endDateSelected')?.value === true
+                        "
+                        [ngClass]="{
+                          'is-invalid':
+                            form.get('enddate')?.invalid &&
+                            form.get('enddate')?.touched
+                        }"
+                      />
+                    </div>
+                    <div
+                      *ngIf="
+                        form.get('enddate')?.invalid &&
+                        form.get('enddate')?.touched
+                      "
+                      class="text-danger"
+                    >
+                      Please Enter the EndDate.
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="closeModal()"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                [disabled]="!canEdit"
+                (click)="saveSchedule()"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <button class="btn btn-light butt" (click)="Close()">Close</button>
+        <button
+          class="btn btn-light butt"
+          [disabled]="!canEdit"
+          (click)="saveProfile()"
+        >
+          Save
+        </button>
+        <!--  <button class="btn btn-light butt"(Click)="Back()">Back</button>-->
+      </div>
+    </div>
+  </div>
+  <!-- modal for schedule -->
+</div>
